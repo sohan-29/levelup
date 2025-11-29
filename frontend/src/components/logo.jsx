@@ -4,8 +4,8 @@ const Logo = () => {
     const navigate = useNavigate();
     return (
         <div className='flex'>
-            <span className='text-3xl font-extrabold cursor-pointer' onClick={() => navigate("/")}>Levelup</span>
-            <img src={logo} width="55px" className='relative top-2 right-3' />
+            <span className='text-2xl md:text-3xl lg:text-3xl font-extrabold cursor-pointer' onClick={() => navigate("/")}>Levelup</span>
+            <img src={logo} className='relative top-2 right-3 w-10 sm:w-12' />
         </div>
     );
 };
