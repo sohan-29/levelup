@@ -3,17 +3,17 @@ import Header from "../components/header";
 
 const LoginForm = () => {
     const [view, setview] = useState("🤫");
+    const [passwordType, setPasswordType] = useState("password");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const viewPassword = () => {
-        const passwordInput = document.getElementById("password");
         if (view === "🤫") {
-            passwordInput.value = "·".repeat(passwordInput.value.length);
+            setPasswordType("text");
             setview("🫣");
         } else {
-            passwordInput.value = password;
-            setview("🤫")
-        };
+            setPasswordType("password");
+            setview("🤫");
+        }
     }
     const submitData = (e) => {
         e.preventDefault();
@@ -27,8 +27,8 @@ const LoginForm = () => {
             </div>
             <div className="relative flex flex-col sm:flex-row sm:justify-between sm:items-center">
                 <label className="text-white text-lg font-medium w-1/4" htmlFor="password">Password:</label>
-                <input className="p-2 rounded-md text-white bg-gray-600 sm:w-sm md:w-xs lg:w-sm" type="text" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                <span className="absolute top-8.5 right-2 sm:top-2 sm:right-3 cursor-pointer" onClick={viewPassword}>{view}</span>
+                <input className="p-2 rounded-md text-white bg-gray-600 sm:w-sm md:w-xs lg:w-sm" type={passwordType} id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                <span className="absolute top-8 right-1.5 sm:top-1 sm:right-1.5 cursor-pointer text-2xl" onClick={viewPassword}>{view}</span>
             <a rel="noopener noreferrer" href="#" className="hover:underline dark:text-amber-200 text-sm absolute top-18 sm:top-11 right-0">forgetpassword?</a>
             </div>
             <button className={`bg-[#fee369] text-gray-800 font-bold py-2 px-4 rounded-md mt-5 ${password && email ? "hover:bg-amber-300" : "cursor-not-allowed"}`} type="submit">Login</button>

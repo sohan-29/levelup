@@ -4,27 +4,27 @@ import Header from "../components/header";
 const SignupForm = () => {
     const [view, setview] = useState("🤫");
     const [confirmView, setConfirmView] = useState("🤫");
+    const [passwordType, setPasswordType] = useState("password");
+    const [confirmPasswordType, setConfirmPasswordType] = useState("password");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const viewPassword = (id) => {
         if (id === "password") {
-            const passwordInput = document.getElementById(id);
             if (view === "🤫") {
-                passwordInput.value = "·".repeat(passwordInput.value.length);
+                setPasswordType("text");
                 setview("🫣");
             } else {
-                passwordInput.value = password;
-                setview("🤫")
+                setPasswordType("password");
+                setview("🤫");
             }
         } else {
-            const passwordInput = document.getElementById(id);
             if (confirmView === "🤫") {
-                passwordInput.value = "·".repeat(passwordInput.value.length);
+                setConfirmPasswordType("text");
                 setConfirmView("🫣");
             } else {
-                passwordInput.value = confirmPassword;
-                setConfirmView("🤫")
+                setConfirmPasswordType("password");
+                setConfirmView("🤫");
             }
         }
     }
@@ -40,14 +40,14 @@ const SignupForm = () => {
             </div>
             <div className="relative flex flex-col sm:flex-row sm:justify-between sm:items-center">
                 <label className="text-white text-lg font-medium w-1/4" htmlFor="password">Password:</label>
-                <input className="p-2 rounded-md text-white bg-gray-600 sm:w-sm md:w-xs lg:w-sm" type="text" id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
-                <span className="absolute top-8.5 right-2 sm:top-2 sm:right-3 cursor-pointer" onClick={() => viewPassword("password")}>{view}</span>
+                <input className="p-2 rounded-md text-white bg-gray-600 sm:w-sm md:w-xs lg:w-sm" type={passwordType} id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                <span className="absolute top-8 right-1.5 sm:top-1 sm:right-1.5 cursor-pointer text-2xl" onClick={() => viewPassword("password")}>{view}</span>
             </div>
             <div className="relative flex flex-col sm:flex-row sm:justify-between sm:items-center">
                 <label className="text-white text-lg font-medium w-1/4" htmlFor="password">Confirm Password:</label>
-                <input className="p-2 rounded-md text-white bg-gray-600 sm:w-sm md:w-xs lg:w-sm" type="text" id="confirmPassword" name="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
-                <span className="absolute top-8.5 right-2 sm:top-4 sm:right-3 cursor-pointer" onClick={() => viewPassword("confirmPassword")}>{confirmView}</span>
-                {password != confirmPassword && <span className="text-red-600 absolute top-14 text-center w-full">password not matched !</span>}
+                <input className="p-2 rounded-md text-white bg-gray-600 sm:w-sm md:w-xs lg:w-sm" type={confirmPasswordType} id="confirmPassword" name="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
+                <span className="absolute top-15 right-1.5 sm:top-3 sm:right-1.5 cursor-pointer text-2xl" onClick={() => viewPassword("confirmPassword")}>{confirmView}</span>
+                {password != confirmPassword && <span className="text-red-600 absolute top-25 sm:top-14 text-center w-full">password not matched !</span>}
             </div>
             <button className={`bg-[#fee369] text-gray-800 font-bold py-2 px-4 rounded-md mt-5 ${password != confirmPassword ? "cursor-not-allowed" : "hover:bg-amber-300"}`} type="submit">Signup</button>
             <p className="px-6 text-sm text-center dark:text-white">already have an account?
