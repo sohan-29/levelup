@@ -24,8 +24,15 @@ router.post('/login', async (req, res) => {
         if (!user || !(await user.comparePassword(password))) {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.json({ token });
+        // Create a secret from user data (or use a fixed secret for consistency)
+        const secret = user._id.toString();
+        const token = jwt.sign({ id: user._id, email: user.email }, secret, { expiresIn: '1h' });
+        res.cookie("authToken", token, {
+            httpOnly: true,
+            secure: true,
+            sameSite: "Strict"
+        });
+        res.json("successfully logged in!");
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
