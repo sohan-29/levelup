@@ -7,6 +7,7 @@ const SignupForm = () => {
     const [passwordType, setPasswordType] = useState("password");
     const [confirmPasswordType, setConfirmPasswordType] = useState("password");
     const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const viewPassword = (id) => {
@@ -30,10 +31,14 @@ const SignupForm = () => {
     }
     const submitData = (e) => {
         e.preventDefault();
-        console.log({ email, password });
+        console.log({ username ,email, password });
     }
     return (
         <form className="flex flex-col md:w-lg lg:w-xl gap-4 bg-gray-700 p-8 rounded-lg shadow-lg" onSubmit={submitData}>
+            <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
+                <label className="text-white text-lg font-medium w-1/4" htmlFor="mail">Username:</label>
+                <input className="p-2 rounded-md text-white bg-gray-600 sm:w-sm md:w-xs lg:w-sm" type="text" id="username" name="username" value={username} onChange={(e) => setUsername(e.target.value)} required />
+            </div>
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
                 <label className="text-white text-lg font-medium w-1/4" htmlFor="mail">Mail:</label>
                 <input className="p-2 rounded-md text-white bg-gray-600 sm:w-sm md:w-xs lg:w-sm" type="email" id="mail" name="mail" value={email} onChange={(e) => setEmail(e.target.value)} required />
