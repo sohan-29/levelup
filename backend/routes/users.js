@@ -1,9 +1,10 @@
 const express = require('express');
 const User = require('../models/User'); // Assuming a User model exists
+const authMiddleware = require('../middleware/auth');
 const router = express.Router();
 
 // Get user profile
-router.get('/profile', async (req, res) => {
+router.get('/profile', authMiddleware, async (req, res) => {
     try {
         const user = await User.findById(req.user.id); // Assuming middleware sets req.user
         res.json(user);
