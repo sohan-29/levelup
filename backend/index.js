@@ -22,7 +22,7 @@ app.get('/', (req, res) => {
 });
 
 // Connect to MongoDB
-const mongoURI = `mongodb+srv://sohan291106_db_user:${process.env.DB_PASSWORD}@levelup.godbbzd.mongodb.net/?appName=levelup`;
+const mongoURI = process.env.MONGO_URI;
 mongoose.connect(mongoURI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB connection error:', err));
