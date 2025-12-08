@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Header from "../components/header";
+import axios from "axios";
 
 const SignupForm = () => {
     const [view, setview] = useState("🤫");
@@ -29,9 +30,19 @@ const SignupForm = () => {
             }
         }
     }
-    const submitData = (e) => {
+    const submitData = async (e) => {
         e.preventDefault();
-        console.log({ username ,email, password });
+        await axios.post('http://localhost:3000/api/auth/signup', {
+            username,
+            email,
+            password
+        }).then((response) => {
+            alert(response.data.message);
+            sessionStorage.setItem("authToken", );
+            window.location.href = "/login";
+        }).catch((error) => {
+            alert(error.response.data.error);
+        });
     }
     return (
         <form className="flex flex-col md:w-lg lg:w-xl gap-4 bg-gray-700 p-8 rounded-lg shadow-lg" onSubmit={submitData}>

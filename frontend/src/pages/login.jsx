@@ -1,11 +1,15 @@
 import { useState } from "react";
 import Header from "../components/header";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const LoginForm = () => {
     const [view, setview] = useState("🤫");
     const [passwordType, setPasswordType] = useState("password");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
     const viewPassword = () => {
         if (view === "🤫") {
             setPasswordType("text");
@@ -15,9 +19,21 @@ const LoginForm = () => {
             setview("🤫");
         }
     }
-    const submitData = (e) => {
+    const submitData = async (e) => {
         e.preventDefault();
-        console.log({ email, password });
+        try {
+            const response = await axios.post('http://localhost:3000/api/auth/login', {
+                email,
+                password
+            }, { withCredentials: true });
+            if (response.data === "successfully logged in!") {
+                toast.success("Successfully logged in!");
+                navigate("/Dashboard");
+            }
+        } catch (error) {
+            alert(error);
+            return;
+        }
     }
     return (
         <form className="flex flex-col md:w-lg lg:w-xl gap-4 bg-gray-700 p-8 rounded-lg shadow-lg" onSubmit={submitData}>
@@ -29,7 +45,7 @@ const LoginForm = () => {
                 <label className="text-white text-lg font-medium w-1/4" htmlFor="password">Password:</label>
                 <input className="p-2 rounded-md text-white bg-gray-600 sm:w-sm md:w-xs lg:w-sm" type={passwordType} id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 <span className="absolute top-8 right-1.5 sm:top-1 sm:right-1.5 cursor-pointer text-2xl" onClick={viewPassword}>{view}</span>
-            <a rel="noopener noreferrer" href="#" className="hover:underline dark:text-amber-200 text-sm absolute top-18 sm:top-11 right-0">forgetpassword?</a>
+                <a rel="noopener noreferrer" href="#" className="hover:underline dark:text-amber-200 text-sm absolute top-18 sm:top-11 right-0">forgetpassword?</a>
             </div>
             <button className={`bg-[#fee369] text-gray-800 font-bold py-2 px-4 rounded-md mt-5 ${password && email ? "hover:bg-amber-300" : "cursor-not-allowed"}`} type="submit">Login</button>
             <p className="px-6 text-sm text-center dark:text-white">Don't have an account yet?
