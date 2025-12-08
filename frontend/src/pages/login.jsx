@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import Header from "../components/header";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../App";
 
 const LoginForm = () => {
+    const { authenticated, setAuthenticated } = useContext(AuthContext);
     const [view, setview] = useState("🤫");
     const [passwordType, setPasswordType] = useState("password");
     const [email, setEmail] = useState("");
@@ -27,6 +29,7 @@ const LoginForm = () => {
                 password
             }, { withCredentials: true });
             if (response.data === "successfully logged in!") {
+                setAuthenticated(true);
                 toast.success("Successfully logged in!");
                 navigate("/Dashboard");
             }
