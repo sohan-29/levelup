@@ -7,21 +7,12 @@ const authMiddleware = async (req, res, next) => {
         return res.status(401).json({ error: 'Access denied' });
     }
     try {
-        // Try to decode to get user ID
-        const decoded = jwt.decode(token);
-        if (!decoded || !decoded.id) {
-            return res.status(401).json({ error: 'Invalid token' });
-        }
-        
-        // Get the user to regenerate the secret
-        const user = await User.findById(decoded.id);
-        if (!user) {
-            return res.status(401).json({ error: 'User not found' });
-        }
-        
-        // Verify with user's ID as secret
-        const secret = user._id.toString();
+        const secret = process.env.JWT_SECRET || 'your-secret-key';
+        // Verify token using server-side secret
         const verified = jwt.verify(token, secret);
+        // Optionally ensure user still exists
+        const user = await User.findById(verified.id);
+        if (!user) return res.status(401).json({ error: 'User not found' });
         req.user = verified;
         next();
     } catch (error) {

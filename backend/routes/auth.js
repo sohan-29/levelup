@@ -24,18 +24,48 @@ router.post('/login', async (req, res) => {
         if (!user || !(await user.comparePassword(password))) {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
-        // Create a secret from user data (or use a fixed secret for consistency)
-        const secret = user._id.toString();
+        const secret = process.env.JWT_SECRET || 'your-secret-key';
         const token = jwt.sign({ id: user._id, email: user.email }, secret, { expiresIn: '1h' });
-        res.cookie("authToken", token, {
+        const isProd = process.env.NODE_ENV === 'production';
+        res.cookie('authToken', token, {
             httpOnly: true,
-            secure: true,
-            sameSite: "Strict"
+            secure: isProd, // send cookie only over HTTPS in production
+            sameSite: isProd ? 'None' : 'Lax',
+            maxAge: 60 * 60 * 1000, // 1 hour
+            path: '/'
         });
-        res.json("successfully logged in!");
+        // Also return token in response body so SPA can store it if needed
+        res.json({ message: 'successfully logged in!', token });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
+});
+
+// Verify token route
+router.get('/verify', async (req, res) => {
+    try {
+        const token = req.cookies.authToken || req.header('Authorization')?.replace('Bearer ', '');
+        if (!token) {
+            return res.status(200).json({ authenticated: false });
+        }
+        const secret = process.env.JWT_SECRET || 'your-secret-key';
+        const verified = jwt.verify(token, secret);
+        res.json({ authenticated: true, user: verified });
+    } catch (error) {
+        res.status(200).json({ authenticated: false });
+    }
+});
+
+// Logout route
+router.post('/logout', (req, res) => {
+    const isProd = process.env.NODE_ENV === 'production';
+    res.clearCookie('authToken', {
+        httpOnly: true,
+        secure: isProd,
+        sameSite: isProd ? 'None' : 'Lax',
+        path: '/'
+    });
+    res.json({ message: 'Logged out successfully' });
 });
 
 module.exports = router;
