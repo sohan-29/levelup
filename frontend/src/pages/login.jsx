@@ -25,16 +25,24 @@ const LoginForm = () => {
         e.preventDefault();
         try {
             const response = await axios.post('http://localhost:3000/api/auth/login', {
-                email,
+                email: email.trim(),
                 password
             }, { withCredentials: true });
-            if (response.data === "successfully logged in!") {
+            if (response.data && response.data.token) {
+                const token = response.data.token;
+                localStorage.setItem('authToken', token);
+                axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 setAuthenticated(true);
                 toast.success("Successfully logged in!");
-                navigate("/Dashboard");
+                navigate("/dashboard");
+            } else if (response.data === "successfully logged in!") {
+                setAuthenticated(true);
+                toast.success("Successfully logged in!");
+                navigate("/dashboard");
             }
         } catch (error) {
-            alert(error);
+            const msg = error?.response?.data?.error || error?.message || 'Login failed';
+            toast.error(msg);
             return;
         }
     }
@@ -50,7 +58,13 @@ const LoginForm = () => {
                 <span className="absolute top-8 right-1.5 sm:top-1 sm:right-1.5 cursor-pointer text-2xl" onClick={viewPassword}>{view}</span>
                 <a rel="noopener noreferrer" href="#" className="hover:underline dark:text-amber-200 text-sm absolute top-18 sm:top-11 right-0">forgetpassword?</a>
             </div>
-            <button className={`bg-[#fee369] text-gray-800 font-bold py-2 px-4 rounded-md mt-5 ${password && email ? "hover:bg-amber-300" : "cursor-not-allowed"}`} type="submit">Login</button>
+            <button
+                className={`bg-[#fee369] text-gray-800 font-bold py-2 px-4 rounded-md mt-5 ${password && email ? "hover:bg-amber-300" : "opacity-60 cursor-not-allowed"}`}
+                type="submit"
+                disabled={!email || !password}
+            >
+                Login
+            </button>
             <p className="px-6 text-sm text-center dark:text-white">Don't have an account yet?
                 <a rel="noopener noreferrer" href="/signup" className="hover:underline dark:text-amber-200"> Sign up</a>.
             </p>
