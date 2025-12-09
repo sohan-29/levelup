@@ -15,6 +15,11 @@ const ProtectedRoute = ({ children }) => {
   return authenticated ? children : <Navigate to="/login" />;
 };
 
+const AuthRedirect = ({ children }) => {
+  const { authenticated } = useContext(AuthContext);
+  return authenticated ? <Navigate to="/dashboard" /> : children;
+};
+
 function App() {
   const [authenticated, setAuthenticated] = useState(() => {
     const savedAuth = localStorage.getItem('authenticated');
@@ -72,8 +77,8 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/signup" element={<SignupPage />} />
+          <Route path="/login" element={<AuthRedirect><LoginPage /></AuthRedirect>} />
+          <Route path="/signup" element={<AuthRedirect><SignupPage /></AuthRedirect>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
           <Route path="*" element={<div>404 Not Found !</div>} />
         </Routes>
