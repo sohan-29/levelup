@@ -6,6 +6,7 @@ const Header = () => {
         <div className="flex justify-between absolute top-0 px-13 sm:px-18 pb-2 pt-3 w-full border-b-2 border-gray-300">
             <Logo />
             <Profile />
+            
         </div>
     );
 }

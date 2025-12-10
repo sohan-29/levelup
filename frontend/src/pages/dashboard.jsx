@@ -16,7 +16,6 @@ const Dashboard = () => {
                 const res = await axios.get('http://localhost:3000/api/users/profile', { withCredentials: true });
                 setUser(res.data);
             } catch (err) {
-                // if unauthorized, clear auth and redirect to login
                 setAuthenticated(false);
                 localStorage.removeItem('authToken');
                 delete axios.defaults.headers.common['Authorization'];
