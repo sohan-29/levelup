@@ -56,11 +56,11 @@ const Profile = () => {
     }, []);
 
     return (
-        user ? <div className="flex items-center justify-center gap-3 cursor-pointer" onClick={() => { setViewProfile(!viewProfile) }}>
+        user ? <div ref={dropdownRef} className="flex items-center justify-center gap-3 cursor-pointer" onClick={() => { setViewProfile(!viewProfile); }}>
             <span className="flex items-center justify-center w-12 h-12 bg-white text-black text-xl font-semibold rounded-full">
                 {profile}
             </span>
-            {viewProfile ? <div ref={dropdownRef} className="absolute top-16 right-4 border-2 border-gray-400 bg-[#202020] text-black p-4 rounded-lg shadow-lg flex flex-col items-start">
+            {viewProfile ? <div className="sm:w-xs md:w-sm xl:md mt-3 absolute top-16 right-4 border-2 border-gray-400 bg-[#202020] text-black p-4 rounded-lg shadow-lg flex flex-col items-start">
                 <p className="mb-2 text-white">Hello, <span className="text-yellow-300">{user.username}!</span></p>
                 <button onClick={logout} title="logout" aria-label="logout" className="cursor-pointer">
                     <svg fill="#ffffff" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24px" height="24px" viewBox="0 0 187.338 187.338" xml:space="preserve">
