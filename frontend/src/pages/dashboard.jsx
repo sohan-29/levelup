@@ -38,53 +38,10 @@ const Dashboard = () => {
             <h1 className="w-full text-center text-amber-200 bold text-lg sm:text-xl md:text-2xl lg:text-3xl mt-6">Build your future by making history !!</h1>
             {user && (
                 <div className="mt-6 text-white">
-                <div className="mt-6 text-white">
-                    <p><strong>Username:</strong> {user.username}</p>
-                    <p><strong>Email:</strong> {user.email}</p>
-                </div>
-                <div className="mt-6 text-white">
-                    <p><strong>Username:</strong> {user.username}</p>
-                    <p><strong>Email:</strong> {user.email}</p>
-                </div><div className="mt-6 text-white">
-                    <p><strong>Username:</strong> {user.username}</p>
-                    <p><strong>Email:</strong> {user.email}</p>
-                </div><div className="mt-6 text-white">
-                    <p><strong>Username:</strong> {user.username}</p>
-                    <p><strong>Email:</strong> {user.email}</p>
-                </div><div className="mt-6 text-white">
-                    <p><strong>Username:</strong> {user.username}</p>
-                    <p><strong>Email:</strong> {user.email}</p>
-                </div><div className="mt-6 text-white">
-                    <p><strong>Username:</strong> {user.username}</p>
-                    <p><strong>Email:</strong> {user.email}</p>
-                </div><div className="mt-6 text-white">
-                    <p><strong>Username:</strong> {user.username}</p>
-                    <p><strong>Email:</strong> {user.email}</p>
-                </div><div className="mt-6 text-white">
-                    <p><strong>Username:</strong> {user.username}</p>
-                    <p><strong>Email:</strong> {user.email}</p>
-                </div><div className="mt-6 text-white">
-                    <p><strong>Username:</strong> {user.username}</p>
-                    <p><strong>Email:</strong> {user.email}</p>
-                </div><div className="mt-6 text-white">
-                    <p><strong>Username:</strong> {user.username}</p>
-                    <p><strong>Email:</strong> {user.email}</p>
-                </div><div className="mt-6 text-white">
-                    <p><strong>Username:</strong> {user.username}</p>
-                    <p><strong>Email:</strong> {user.email}</p>
-                </div><div className="mt-6 text-white">
-                    <p><strong>Username:</strong> {user.username}</p>
-                    <p><strong>Email:</strong> {user.email}</p>
-                </div>vv<div className="mt-6 text-white">
-                    <p><strong>Username:</strong> {user.username}</p>
-                    <p><strong>Email:</strong> {user.email}</p>
-                </div><div className="mt-6 text-white">
-                    <p><strong>Username:</strong> {user.username}</p>
-                    <p><strong>Email:</strong> {user.email}</p>
-                </div><div className="mt-6 text-white">
-                    <p><strong>Username:</strong> {user.username}</p>
-                    <p><strong>Email:</strong> {user.email}</p>
-                </div>v
+                    <div className="mt-6 text-white">
+                        <p><strong>Username:</strong> {user.username}</p>
+                        <p><strong>Email:</strong> {user.email}</p>
+                    </div>
                 </div>
             )}
         </div>

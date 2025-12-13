@@ -3,7 +3,7 @@ import Header from '../components/header';
 const LandingPage = () => {
     const navigate = useNavigate();
     return (
-        <div className='relative bg-gray-800 text-white'>
+        <div className='relative bg-[#242424] text-white'>
             <Header />
             <div className='flex flex-col items-center justify-center min-h-screen min-w-screen'>
                 <h1 className='text-[#fee362] text-5xl font-bold mb-4'>Make history with your comeback!!</h1>

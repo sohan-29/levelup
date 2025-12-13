@@ -47,14 +47,14 @@ const LoginForm = () => {
         }
     }
     return (
-        <form className="flex flex-col md:w-lg lg:w-xl gap-4 bg-gray-700 p-8 rounded-lg shadow-lg" onSubmit={submitData}>
+        <form className="flex flex-col md:w-lg lg:w-xl gap-4 bg-[#292929] p-8 rounded-lg shadow-lg" onSubmit={submitData}>
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
                 <label className="text-white text-lg font-medium w-1/4" htmlFor="mail">Mail:</label>
-                <input className="p-2 rounded-md text-white bg-gray-600 sm:w-sm md:w-xs lg:w-sm" type="email" id="mail" name="mail" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                <input className="p-2 rounded-md text-white bg-[#333333] sm:w-sm md:w-xs lg:w-sm" type="email" id="mail" name="mail" value={email} onChange={(e) => setEmail(e.target.value)} required />
             </div>
             <div className="relative flex flex-col sm:flex-row sm:justify-between sm:items-center">
                 <label className="text-white text-lg font-medium w-1/4" htmlFor="password">Password:</label>
-                <input className="p-2 rounded-md text-white bg-gray-600 sm:w-sm md:w-xs lg:w-sm" type={passwordType} id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                <input className="p-2 rounded-md text-white bg-[#333333] sm:w-sm md:w-xs lg:w-sm" type={passwordType} id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
                 <span className="absolute top-8 right-1.5 sm:top-1 sm:right-1.5 cursor-pointer text-2xl" onClick={viewPassword}>{view}</span>
                 <a rel="noopener noreferrer" href="#" className="hover:underline dark:text-amber-200 text-sm absolute top-18 sm:top-11 right-0">forgetpassword?</a>
             </div>
@@ -74,7 +74,7 @@ const LoginForm = () => {
 
 const LoginPage = () => {
     return (
-        <div className="relative flex flex-col items-center min-w-screen min-h-screen bg-gray-800">
+        <div className="relative flex flex-col items-center min-w-screen min-h-screen bg-[#242424] text-white">
             <Header />
             <div className="flex flex-col justify-center items-center mt-20">
                 <h1 className="text-4xl md:text-5xl text-amber-200 mt-20 mb-6">Login</h1>
