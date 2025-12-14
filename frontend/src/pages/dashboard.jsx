@@ -1,8 +1,10 @@
-import { useContext, useEffect, useState } from "react";
+import React from "react";
+import { Suspense, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../App";
 import Header from "../components/header";
 import axios from "axios";
+import Loader from "../components/loader";
 
 const Dashboard = () => {
     const { authenticated, setAuthenticated } = useContext(AuthContext);
@@ -30,18 +32,21 @@ const Dashboard = () => {
         }
     }, [authenticated]);
 
-    if (loading) return <div>Loading dashboard...</div>;
+    if (loading) return <Loader/>;
+    const GridChart = React.lazy(() => import('../components/gridChart'));
 
     return (
         <div className="min-h-screen min-w-screen bg-[#242424]">
             <Header />
             <h1 className="w-full text-center text-amber-200 bold text-lg sm:text-xl md:text-2xl lg:text-3xl mt-6">Build your future by making history !!</h1>
+            <Suspense fallback={<div>Loading chart...</div>}>
+            </Suspense>
             {user && (
                 <div className="mt-6 text-white">
-                    <div className="mt-6 text-white">
-                        <p><strong>Username:</strong> {user.username}</p>
-                        <p><strong>Email:</strong> {user.email}</p>
-                    </div>
+                    <h2 className="text-center text-2xl mb-4">Welcome, {user.username}!</h2>
+                    <Suspense fallback={<Loader />}>
+                    <GridChart />
+                    </Suspense>
                 </div>
             )}
         </div>

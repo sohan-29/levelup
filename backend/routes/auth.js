@@ -31,7 +31,7 @@ router.post('/login', async (req, res) => {
             httpOnly: true,
             secure: isProd, // send cookie only over HTTPS in production
             sameSite: isProd ? 'None' : 'Lax',
-            maxAge: 60 * 60 * 1000, // 1 hour
+            maxAge: 48 * 60 * 60 * 1000, // 2 days
             path: '/'
         });
         // Also return token in response body so SPA can store it if needed
