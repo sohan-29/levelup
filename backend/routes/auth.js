@@ -25,13 +25,13 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid credentials' });
         }
         const secret = process.env.JWT_SECRET || 'your-secret-key';
-        const token = jwt.sign({ id: user._id, email: user.email }, secret, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user._id, email: user.email }, secret, { expiresIn: '1d' });
         const isProd = process.env.NODE_ENV === 'production';
         res.cookie('authToken', token, {
             httpOnly: true,
             secure: isProd, // send cookie only over HTTPS in production
             sameSite: isProd ? 'None' : 'Lax',
-            maxAge: 48 * 60 * 60 * 1000, // 2 days
+            maxAge: 24 * 60 * 60 * 1000, // 2 days
             path: '/'
         });
         // Also return token in response body so SPA can store it if needed
