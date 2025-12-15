@@ -2,7 +2,6 @@ import { useContext, useState } from "react";
 import Header from "../components/header";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../App";
 
 const LoginForm = () => {
@@ -11,7 +10,6 @@ const LoginForm = () => {
     const [passwordType, setPasswordType] = useState("password");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const navigate = useNavigate();
     const viewPassword = () => {
         if (view === "🤫") {
             setPasswordType("text");
@@ -34,11 +32,9 @@ const LoginForm = () => {
                 axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
                 setAuthenticated(true);
                 toast.success("Successfully logged in!");
-                navigate("/dashboard");
             } else if (response.data === "successfully logged in!") {
                 setAuthenticated(true);
                 toast.success("Successfully logged in!");
-                navigate("/dashboard");
             }
         } catch (error) {
             const msg = error?.response?.data?.error || error?.message || 'Login failed';

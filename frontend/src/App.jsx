@@ -21,10 +21,7 @@ const AuthRedirect = ({ children }) => {
 };
 
 function App() {
-  const [authenticated, setAuthenticated] = useState(() => {
-    const savedAuth = localStorage.getItem('authenticated');
-    return savedAuth === 'true';
-  });
+  const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
 
   const handleSetAuthenticated = (value) => {
@@ -41,12 +38,12 @@ function App() {
         }
         const response = await axios.get('http://localhost:3000/api/auth/verify', { withCredentials: true });
         if (response.data && response.data.authenticated) {
-          setAuthenticated(true);
+          handleSetAuthenticated(true);
         } else {
-          setAuthenticated(false);
+          handleSetAuthenticated(false);
         }
       } catch (error) {
-        setAuthenticated(false);
+        handleSetAuthenticated(false);
       } finally {
         setLoading(false);
       }
@@ -76,7 +73,7 @@ function App() {
       <Toaster />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<LandingPage />} />
+          <Route path="/" element={authenticated ? <Navigate to="/dashboard" /> : <LandingPage />} />
           <Route path="/login" element={<AuthRedirect><LoginPage /></AuthRedirect>} />
           <Route path="/signup" element={<AuthRedirect><SignupPage /></AuthRedirect>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
