@@ -5,6 +5,7 @@ import { AuthContext } from "../App";
 import Header from "../components/header";
 import axios from "axios";
 import Loader from "../components/loader";
+import Activities from "../components/activities";
 
 const Dashboard = () => {
     const { authenticated, setAuthenticated } = useContext(AuthContext);
@@ -32,7 +33,7 @@ const Dashboard = () => {
         }
     }, [authenticated]);
 
-    if (loading) return <Loader/>;
+    if (loading) return <Loader />;
     const GridChart = React.lazy(() => import('../components/gridChart'));
 
     return (
@@ -45,7 +46,10 @@ const Dashboard = () => {
                 <div className="mt-6 text-white">
                     <h2 className="text-center text-2xl mb-4">Welcome, {user.username}!</h2>
                     <Suspense fallback={<Loader />}>
-                    <GridChart />
+                        <div className="flex text-center mb-6">
+                            <Activities />
+                            <GridChart />
+                        </div>
                     </Suspense>
                 </div>
             )}
