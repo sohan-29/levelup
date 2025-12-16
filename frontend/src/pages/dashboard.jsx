@@ -12,7 +12,6 @@ const Dashboard = () => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
-    const [newActivity, setNewActivity] = useState(false);
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -49,8 +48,7 @@ const Dashboard = () => {
                     <Suspense fallback={<Loader />}>
                         <div className="flex text-center mb-6">
                             <div>
-                            <Activities newActivity={newActivity} setNewActivity={setNewActivity} />
-                            <Activities.AddActivity setNewActivity={setNewActivity} />
+                            <Activities />
                             </div>
                             <GridChart />
                         </div>

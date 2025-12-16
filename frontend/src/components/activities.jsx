@@ -1,8 +1,41 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 
-const Activities = ({newActivity, setNewActivity}) => {
+const AddActivity = ({setNewActivity}) => {
+    const [title, setTitle] = useState("");
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            await axios.post("http://localhost:3000/api/activities/activity", {
+                "title":title,
+                "createdDate": new Date().toISOString()
+            }, { withCredentials: true });
+            setTitle("");
+            setNewActivity(prev => !prev);
+        } catch (error) {
+            console.error("Error adding activity:", error);
+        }
+    };
+
+    return (
+        <form onSubmit={handleSubmit} className="mb-4">
+            <input
+                type="text"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                placeholder="New activity"
+                className="border p-2 mr-2"
+            />
+            <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+                Add Activity
+            </button>
+        </form>
+    );
+}
+
+const Activities = () => {
     const [tasks, setTasks] = useState([]);
+    const [newActivity, setNewActivity] = useState(false);
 
     useEffect(() => {
         const fetchActivities = async () => {
@@ -34,41 +67,9 @@ const Activities = ({newActivity, setNewActivity}) => {
                         ))}
                 </ul>
             )}
+            <AddActivity setNewActivity={setNewActivity} />
         </div>
     );
 }
-
-const AddActivity = ({setNewActivity}) => {
-    const [title, setTitle] = useState("");
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            await axios.post("http://localhost:3000/api/activities/activity", { 
-                "title":title,
-                "createdDate": new Date().toISOString()
-            }, { withCredentials: true });
-            setTitle("");
-            setNewActivity(true);
-        } catch (error) {
-            console.error("Error adding activity:", error);
-        }
-    };
-
-    return (
-        <form onSubmit={handleSubmit} className="mb-4">
-            <input
-                type="text"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                placeholder="New activity"
-                className="border p-2 mr-2"
-            />
-            <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-                Add Activity
-            </button>
-        </form>
-    );
-}
-Activities.AddActivity = AddActivity;
 
 export default Activities;
