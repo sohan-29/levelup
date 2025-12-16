@@ -12,6 +12,7 @@ const Dashboard = () => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
+    const [newActivity, setNewActivity] = useState(false);
 
     useEffect(() => {
         const fetchProfile = async () => {
@@ -47,7 +48,10 @@ const Dashboard = () => {
                     <h2 className="text-center text-2xl mb-4">Welcome, {user.username}!</h2>
                     <Suspense fallback={<Loader />}>
                         <div className="flex text-center mb-6">
-                            <Activities />
+                            <div>
+                            <Activities newActivity={newActivity} setNewActivity={setNewActivity} />
+                            <Activities.AddActivity setNewActivity={setNewActivity} />
+                            </div>
                             <GridChart />
                         </div>
                     </Suspense>
