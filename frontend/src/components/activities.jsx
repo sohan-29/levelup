@@ -50,6 +50,16 @@ const Activities = () => {
         fetchActivities();
     }, [newActivity]);
 
+    const handleDelete = async (id) => {
+        try{
+            console.log("Deleting activity with id:", id);
+            const response = await axios.delete(`http://localhost:3000/api/activities/activity/${id}`, { withCredentials: true });
+            setNewActivity(prev => !prev);
+        } catch (error) {
+            console.error("Error deleting activity:", error);
+        }
+    };
+
     return (
         <div>
             <h1 className="text-2xl font-bold mb-4">Your Daily Activities</h1>
@@ -63,6 +73,7 @@ const Activities = () => {
                         tasks.map((task,index) => (
                             <li key={index} className="mb-2 p-4 border rounded">
                                 {task.title}
+                                <span className="ml-4 text-sm text-gray-400" onClick={()=>handleDelete(task._id)}>X</span>
                             </li>
                         ))}
                 </ul>
