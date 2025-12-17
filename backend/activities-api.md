@@ -110,7 +110,7 @@ o  ```
 
 ### 3. Delete an Activity
 - **Method**: DELETE
-- **Endpoint**: `/activity/:id`
+- **Endpoint**: `/:id`
 - **Description**: Deletes a specific activity by its ID for the authenticated user. Only the creator of the activity can delete it.
 
 #### Input Data

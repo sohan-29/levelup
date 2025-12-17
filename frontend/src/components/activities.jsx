@@ -53,7 +53,7 @@ const Activities = () => {
     const handleDelete = async (id) => {
         try{
             console.log("Deleting activity with id:", id);
-            const response = await axios.delete(`http://localhost:3000/api/activities/activity/${id}`, { withCredentials: true });
+            const response = await axios.delete(`http://localhost:3000/api/activities/${id}`, { withCredentials: true });
             setNewActivity(prev => !prev);
         } catch (error) {
             console.error("Error deleting activity:", error);
