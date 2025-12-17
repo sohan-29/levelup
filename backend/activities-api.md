@@ -106,3 +106,32 @@ No request body required. The user is identified via the authentication token.
   {
     "error": "error message"
   }
+o  ```
+
+### 3. Delete an Activity
+- **Method**: DELETE
+- **Endpoint**: `/activity/:id`
+- **Description**: Deletes a specific activity by its ID for the authenticated user. Only the creator of the activity can delete it.
+
+#### Input Data
+- **URL Parameter**: `id` (string, required): The ID of the activity to delete.
+- No request body required. The user is identified via the authentication token.
+
+#### Response
+- **Success (200 OK)**: Returns a confirmation message.
+  ```json
+  {
+    "message": "Activity deleted successfully"
+  }
+  ```
+- **Error (404 Not Found)**: If the activity does not exist or does not belong to the user.
+  ```json
+  {
+    "error": "Activity not found"
+  }
+  ```
+- **Error (500 Internal Server Error)**: If there's an issue deleting the activity.
+  ```json
+  {
+    "error": "error message"
+  }

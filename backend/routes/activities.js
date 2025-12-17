@@ -13,13 +13,13 @@ router.post('/activity', authMiddleware, async (req, res) => {
             return res.status(400).json({ error: 'title is required and cannot be empty' });
         }
         if (!createdDate) {
-            return res.status(400).json({ error: 'createdDate is required (format: YYYY-MM-DD or ISO date)' });
+            return res.status(400).json({ error: 'createdDate is required (format: ISO date)' });
         }
         
         // Parse and validate date
         const parsedDate = new Date(createdDate);
         if (isNaN(parsedDate.getTime())) {
-            return res.status(400).json({ error: 'createdDate must be a valid date (format: YYYY-MM-DD or ISO date string)' });
+            return res.status(400).json({ error: 'createdDate must be a valid date (format: ISO date string)' });
         }
         
         const activity = new Activities({
@@ -41,6 +41,18 @@ router.get('/', authMiddleware, async (req, res) => {
     try {
         const activities = await Activities.find({ createdBy: req.user.id });
         res.json(activities);
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});o
+
+router.delete('/activity/:id', authMiddleware, async (req, res) => {
+    try {
+        const activity = await Activities.findOneAndDelete({ _id: req.params.id, createdBy: req.user.id });
+        if (!activity) {
+            return res.status(404).json({ error: 'Activity not found' });
+        }
+        res.json({ message: 'Activity deleted successfully' });
     } catch (error) {
         res.status(500).json({ error: error.message });
     }
