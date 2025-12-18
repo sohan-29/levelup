@@ -59,32 +59,33 @@ router.get('/:id', authMiddleware, async (req, res) => {
     }
 });
 
-// Update activity (currently not required)
-// router.put('/:id', authMiddleware, async (req, res) => {
-//     try {
-//         const { title, createdDate, streak, dailyStatus } = req.body;
-//         const updateData = {};
+// Update activity
+router.put('/:id', authMiddleware, async (req, res) => {
+    try {
+        const { title, createdDate, streak, dailyStatus, completed } = req.body;
+        const updateData = {};
 
-//         if (title !== undefined) updateData.title = title.trim();
-//         if (createdDate !== undefined) updateData.createdDate = new Date(createdDate);
-//         if (streak !== undefined) updateData.streak = Number(streak);
-//         if (dailyStatus !== undefined) updateData.dailyStatus = dailyStatus;
+        if (title !== undefined) updateData.title = title.trim();
+        if (createdDate !== undefined) updateData.createdDate = new Date(createdDate);
+        if (streak !== undefined) updateData.streak = Number(streak);
+        if (dailyStatus !== undefined) updateData.dailyStatus = dailyStatus;
+        if (completed !== undefined) updateData.completed = completed;
 
-//         const activity = await Activities.findOneAndUpdate(
-//             { _id: req.params.id, createdBy: req.user.id },
-//             updateData,
-//             { new: true, runValidators: true }
-//         );
+        const activity = await Activities.findOneAndUpdate(
+            { _id: req.params.id, createdBy: req.user.id },
+            updateData,
+            { new: true, runValidators: true }
+        );
 
-//         if (!activity) {
-//             return res.status(404).json({ error: 'Activity not found' });
-//         }
+        if (!activity) {
+            return res.status(404).json({ error: 'Activity not found' });
+        }
 
-//         res.json({ message: 'Activity updated successfully', activity });
-//     } catch (error) {
-//         res.status(400).json({ error: error.message });
-//     }
-// });
+        res.json({ message: 'Activity updated successfully', activity });
+    } catch (error) {
+        res.status(400).json({ error: error.message });
+    }
+});
 
 // Delete activity
 router.delete('/:id', authMiddleware, async (req, res) => {

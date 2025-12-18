@@ -16,7 +16,7 @@ const Popup = ({ message, del, cancel }) => {
     );
 };
 
-const AddActivity = ({ setNewActivity }) => {
+const AddActivity = ({ setNewActivity, parentSetNewActivity }) => {
     const [title, setTitle] = useState("");
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -27,6 +27,7 @@ const AddActivity = ({ setNewActivity }) => {
             }, { withCredentials: true });
             setTitle("");
             setNewActivity(prev => !prev);
+            parentSetNewActivity(prev => !prev); // Trigger dashboard refresh
         } catch (error) {
             console.error("Error adding activity:", error);
         }
@@ -46,7 +47,7 @@ const AddActivity = ({ setNewActivity }) => {
     );
 }
 
-const Activities = () => {
+const Activities = ({ setNewActivity: parentSetNewActivity }) => {
     const [tasks, setTasks] = useState([]);
     const [newActivity, setNewActivity] = useState(false);
     const [showPopup, setShowPopup] = useState(false);
@@ -80,6 +81,7 @@ const Activities = () => {
             console.log("Deleting activity with id:", id);
             await axios.delete(`http://localhost:3000/api/activities/${id}`, { withCredentials: true });
             setNewActivity(prev => !prev);
+            parentSetNewActivity(prev => !prev);
         } catch (error) {
             console.error("Error deleting activity:", error);
         }
@@ -126,7 +128,7 @@ const Activities = () => {
                 <div onClick={(e) => {e.stopPropagation(); setAddActivity(true);}} className={"flex justify-center cursor-pointer text-2xl font-bold text-yellow-200 hover:text-yellow-300 mt-4 " + (addActivity ? "hidden" : "")}>
                     <svg className="w-7 h-7 border text-white p-1 rounded-full" fill="#fff" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="64px" height="64px" viewBox="0 0 70 70" enable-background="new 0 0 70 70" xml:space="preserve" stroke="#fff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <g> <path d="M34.583,7c2.209,0,4,1.773,4,3.962v19.999l20.305,0.038c2.189,0,4.098,1.791,4.098,4c0,2.208-1.976,4-4.164,4 l-20.238-0.038v20.076c0,2.188-1.791,3.963-4,3.963s-4-1.774-4-3.963V38.961l-19.77,0.038c-2.188,0-3.828-1.792-3.828-4 c0-2.209,1.572-4,3.761-4l19.837-0.038V10.962C30.583,8.773,32.374,7,34.583,7 M34.583,3c-4.411,0-8,3.571-8,7.962v16.007 l-15.777,0.03c-4.383,0-7.82,3.589-7.82,8s3.37,8,7.761,8l15.837-0.03v16.068c0,4.391,3.589,7.963,8,7.963s8-3.572,8-7.963V42.969 l16.297,0.03c4.398,0,8.105-3.589,8.105-8s-3.773-8-8.164-8l-16.238-0.03V10.962C42.583,6.571,38.994,3,34.583,3L34.583,3z"></path> </g> <g> <path d="M35.583,15.136c-0.553,0-1-0.447-1-1v-3c0-0.553,0.447-1,1-1s1,0.447,1,1v3C36.583,14.688,36.136,15.136,35.583,15.136z"></path> </g> <g> <path d="M35.583,29.136c-0.553,0-1-0.447-1-1v-10c0-0.553,0.447-1,1-1s1,0.447,1,1v10C36.583,28.688,36.136,29.136,35.583,29.136z "></path> </g> </g> </g></svg>
                 </div>
-                {addActivity && <AddActivity setNewActivity={setNewActivity} />}
+                {addActivity && <AddActivity setNewActivity={setNewActivity} parentSetNewActivity={parentSetNewActivity} />}
             </div>
         </div>
     );

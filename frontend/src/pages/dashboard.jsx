@@ -11,6 +11,8 @@ const Dashboard = () => {
     const { authenticated, setAuthenticated } = useContext(AuthContext);
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
+    const [tasks, setTasks] = useState([]);
+    const [newActivity, setNewActivity] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -27,11 +29,23 @@ const Dashboard = () => {
                 setLoading(false);
             }
         };
-        if (authenticated) fetchProfile();
+        const fetchActivities = async () => {
+            try {
+                const response = await axios.get("http://localhost:3000/api/activities/", { withCredentials: true });
+                setTasks(response.data);
+                setNewActivity(false);
+            } catch (error) {
+                console.error("Error fetching activities:", error);
+            }
+        }
+        if (authenticated) {
+            fetchProfile();
+            fetchActivities();
+        }
         else {
             setLoading(false);
         }
-    }, [authenticated]);
+    }, [authenticated, newActivity]);
 
     if (loading) return <div className="min-w-screen"><Loader /></div>
     const GridChart = React.lazy(() => import('../components/gridChart'));
@@ -45,10 +59,8 @@ const Dashboard = () => {
                     <h2 className="text-center text-2xl mb-4">Welcome, {user.username}!</h2>
                     <Suspense fallback={<Loader />}>
                         <div className="flex text-center mb-6">
-                            <div>
-                            <Activities />
-                            </div>
-                            <GridChart />
+                            <Activities setNewActivity={setNewActivity} />
+                            <GridChart tasks={tasks} setNewActivity={setNewActivity} />
                         </div>
                     </Suspense>
                 </div>
