@@ -33,15 +33,13 @@ const Dashboard = () => {
         }
     }, [authenticated]);
 
-    if (loading) return <Loader />;
+    if (loading) return <div className="min-w-screen"><Loader /></div>
     const GridChart = React.lazy(() => import('../components/gridChart'));
 
     return (
         <div className="min-h-screen min-w-screen bg-[#242424]">
             <Header />
             <h1 className="w-full text-center text-amber-200 bold text-lg sm:text-xl md:text-2xl lg:text-3xl mt-6">Build your future by making history !!</h1>
-            <Suspense fallback={<div>Loading chart...</div>}>
-            </Suspense>
             {user && (
                 <div className="mt-6 text-white">
                     <h2 className="text-center text-2xl mb-4">Welcome, {user.username}!</h2>

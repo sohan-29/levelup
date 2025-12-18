@@ -87,7 +87,7 @@ const Activities = () => {
 
     return (
         <div onClick={()=>setAddActivity(false)} className="m-3 sm:w-69">
-            <h1 className="text-2xl font-bold mb-4">Your Daily Activities</h1>
+            <h1 className="text-2xl font-bold mb-7">Your Daily Activities</h1>
             {tasks.length == 0 ? (
                 <div>
                     <p className="text-2xl text-yellow-200">No activities found.</p>
