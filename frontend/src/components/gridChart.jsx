@@ -95,52 +95,89 @@ function GridChart({ tasks, setNewActivity }) {
 
   return (
     <div className="flex-1 p-4">
-      <div className="space-y-4">
-        {tasks.map((task) => {
-          const taskCreatedDate = new Date(task.createdDate);
-          taskCreatedDate.setHours(0, 0, 0, 0);
-          const streak = calculateStreak(task.dailyStatus, taskCreatedDate);
+      {/* Calendar Header */}
+      <div className="overflow-x-auto">
+        {/* Date Header Row */}
+        <div className="flex sticky top-0 z-10">
+          {/* Task Title Column Header */}
+          <div className="w-48 shrink-0 flex items-center px-5 py-3">
+            <p className="text-xl font-bold text-white">Activities</p>
+          </div>
 
-          return (
-            <div key={task._id} className="flex items-center gap-4">
-              {/* Task Title with Streak */}
-              <div className="w-48 shrink-0">
-                <p className="text-white text-sm font-semibold truncate">{task.title}</p>
-                <p className="text-xs text-green-400 mt-1">🔥 {streak} day streak</p>
-              </div>
+          {/* Date Headers */}
+          <div className="flex gap-1">
+            {allDates.map((date, idx) => {
+              const isToday = date.toDateString() === today.toDateString();
+              const dayOfMonth = date.getDate();
+              const dayName = date.toLocaleDateString("en-US", { weekday: "short" });
 
-              {/* Date Boxes Row */}
-              <div className="flex-1 overflow-x-auto">
-                <div className="flex gap-1 pb-2">
+              return (
+                <div
+                  key={idx}
+                  className={`w-12 shrink-0 flex flex-col items-center justify-center py-2 text-center transition-all ${
+                    isToday ? "bg-yellow-200 text-black rounded" : ""
+                  }`}
+                >
+                  <div className={`text-xs font-semibold ${isToday ? "" : "text-gray-400"}`}>
+                    {dayName}
+                  </div>
+                  <div className={`text-sm font-bold ${isToday ? "" : "text-white"}`}>
+                    {dayOfMonth}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Activity Rows */}
+        <div className="mt-4 space-y-2">
+          {tasks.map((task) => {
+            const taskCreatedDate = new Date(task.createdDate);
+            taskCreatedDate.setHours(0, 0, 0, 0);
+            const streak = calculateStreak(task.dailyStatus, taskCreatedDate);
+
+            return (
+              <div key={task._id} className="flex gap-1 items-center">
+                {/* Task Name and Streak */}
+                <div className="w-48 shrink-0 px-5 py-2">
+                  <p className="text-white text-sm font-semibold truncate">{task.title}</p>
+                  <p className="text-xs text-yellow-200 mt-1">🔥 {streak}</p>
+                </div>
+
+                {/* Date Status Boxes */}
+                <div className="flex gap-1">
                   {allDates.map((date, idx) => {
                     const isCompleted = task.dailyStatus?.some(
-                      (status) => new Date(status.date).toDateString() === date.toDateString() && status.completed
+                      (status) =>
+                        new Date(status.date).toDateString() === date.toDateString() &&
+                        status.completed
                     );
 
                     const isBeforeTaskCreated = date < taskCreatedDate;
                     const isPastDate = date < today;
                     const isToday = date.toDateString() === today.toDateString();
-                    const isClickable = isToday; // Only allow clicking on today
+                    const isClickable = isToday;
 
-                    let boxClasses = "w-10 h-10 flex items-center justify-center rounded text-xs font-medium transition-all shrink-0";
+                    let boxClasses = "w-12 h-8 flex items-center justify-center rounded text-sm font-medium transition-all cursor-default";
 
                     if (isBeforeTaskCreated || isPastDate) {
-                      // Before task created or past dates - empty boxes, not clickable
+                      // Before task created or past dates
                       if (isCompleted) {
-                        boxClasses += " bg-blue-600 border-2 border-blue-700 cursor-not-allowed";
+                        boxClasses += " bg-white text-black font-bold";
                       } else {
-                        boxClasses += " bg-gray-700 border border-gray-600 cursor-not-allowed opacity-50";
+                        boxClasses += " bg-gray-700 opacity-50";
                       }
                     } else if (isToday) {
                       // Today - clickable
                       if (isCompleted) {
-                        boxClasses += " bg-green-500 border-2 border-green-600 shadow-md cursor-pointer text-white font-bold";
+                        boxClasses += " bg-white text-black font-bold cursor-pointer hover:opacity-80";
                       } else {
-                        boxClasses += " bg-gray-700 border-2 border-yellow-500 cursor-pointer hover:bg-gray-600 hover:border-yellow-400";
+                        boxClasses += " bg-yellow-200 text-black border-2 border-yellow-300 cursor-pointer hover:bg-yellow-100";
                       }
                     } else {
-                      // Future dates - empty boxes, not clickable
-                      boxClasses += " bg-gray-800 border border-gray-700 cursor-not-allowed opacity-30";
+                      // Future dates - disabled
+                      boxClasses += " bg-gray-700 opacity-20 cursor-not-allowed";
                     }
 
                     return (
@@ -158,9 +195,9 @@ function GridChart({ tasks, setNewActivity }) {
                   })}
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
       </div>
     </div>
   );
