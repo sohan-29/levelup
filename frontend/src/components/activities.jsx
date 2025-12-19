@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
+import toast from "react-hot-toast";
 
 const Popup = ({ message, del, cancel }) => {
     const popup = useRef();
@@ -33,14 +34,16 @@ const AddActivity = ({ setNewActivity, parentSetNewActivity }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post("http://localhost:3000/api/activities/activity", {
+            const response = await axios.post("http://localhost:3000/api/activities/activity", {
                 "title": title,
                 "createdDate": new Date().toISOString()
             }, { withCredentials: true });
             setTitle("");
             setNewActivity(prev => !prev);
             parentSetNewActivity(prev => !prev); // Trigger dashboard refresh
+            toast.success(response.data.message)
         } catch (error) {
+            toast.error("something went wrong while adding acitvity")
             console.error("Error adding activity:", error);
         }
     };
@@ -90,11 +93,12 @@ const Activities = ({ setNewActivity: parentSetNewActivity }) => {
 
     const handleDelete = async (id) => {
         try {
-            console.log("Deleting activity with id:", id);
-            await axios.delete(`http://localhost:3000/api/activities/${id}`, { withCredentials: true });
+            const response = await axios.delete(`http://localhost:3000/api/activities/${id}`, { withCredentials: true });
             setNewActivity(prev => !prev);
             parentSetNewActivity(prev => !prev);
+            toast.success(response.data.message)
         } catch (error) {
+            toast.error("something went while deleting activity")
             console.error("Error deleting activity:", error);
         }
     };

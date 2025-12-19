@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 function GridChart({ tasks, setNewActivity }) {
   const [updatingDate, setUpdatingDate] = useState(null);
@@ -25,16 +26,14 @@ function GridChart({ tasks, setNewActivity }) {
     currentDate.setDate(currentDate.getDate() + 1);
   }
 
-  // Calculate streak for a task
   const calculateStreak = (dailyStatus, taskCreatedDate) => {
     let streakCount = 0;
     let currentDate = new Date(today);
-    
+
     while (currentDate >= new Date(taskCreatedDate)) {
       const isCompleted = dailyStatus?.some(
         (status) => new Date(status.date).toDateString() === currentDate.toDateString() && status.completed
       );
-      
       if (isCompleted) {
         streakCount++;
         currentDate.setDate(currentDate.getDate() - 1);
@@ -42,7 +41,6 @@ function GridChart({ tasks, setNewActivity }) {
         break;
       }
     }
-    
     return streakCount;
   };
 
@@ -60,63 +58,36 @@ function GridChart({ tasks, setNewActivity }) {
     }
 
     setUpdatingDate(`${task._id}-${date.toDateString()}`);
-    
+
     try {
-      // Check if this date is already completed
       const isCompleted = task.dailyStatus?.some(
         (status) => new Date(status.date).toDateString() === clickedDate.toDateString() && status.completed
       );
 
-      console.log("Current status:", isCompleted);
-      console.log("Task ID:", task._id);
-      console.log("Task Object:", task);
-      console.log("Clicked Date:", clickedDate);
-
-      // Update the daily status
       const updatedDailyStatus = isCompleted
         ? task.dailyStatus.filter(status => new Date(status.date).toDateString() !== clickedDate.toDateString())
         : [...(task.dailyStatus || []), { date: clickedDate, completed: true }];
 
-      // Calculate streak after update
       const newStreak = calculateStreak(updatedDailyStatus, taskCreatedDate);
-
-      console.log("Updated Daily Status:", updatedDailyStatus);
-      console.log("New Streak:", newStreak);
-
-      const apiUrl = `http://localhost:3000/api/activities/${task._id}`;
-      console.log("API URL:", apiUrl);
-      console.log("Request Body:", {
-        dailyStatus: updatedDailyStatus,
-        streak: newStreak,
-        completed: !isCompleted
-      });
-
-      // Send to API with streak and completion status
       const response = await axios.put(
-        apiUrl,
+        `http://localhost:3000/api/activities/${task._id}`,
         {
           dailyStatus: updatedDailyStatus,
           streak: newStreak,
           completed: !isCompleted
         },
-        { 
+        {
           withCredentials: true,
           headers: {
             'Content-Type': 'application/json'
           }
         }
       );
-
-      console.log("API Response:", response.data);
-
-      // Trigger dashboard refresh
+      toast.success(response.data.message)
       setNewActivity(prev => !prev);
     } catch (error) {
-      console.error("Full Error Object:", error);
-      console.error("Error Status:", error.response?.status);
-      console.error("Error Data:", error.response?.data);
-      console.error("Error Message:", error.message);
-      alert("Error updating activity: " + (error.response?.data?.error || error.message));
+      console.log(error)
+      toast.error("Unable to update activity")
     } finally {
       setUpdatingDate(null);
     }
@@ -151,7 +122,7 @@ function GridChart({ tasks, setNewActivity }) {
                     const isToday = date.toDateString() === today.toDateString();
                     const isClickable = isToday; // Only allow clicking on today
 
-                    let boxClasses = "w-10 h-10 flex items-center justify-center rounded text-xs font-medium transition-all flex-shrink-0";
+                    let boxClasses = "w-10 h-10 flex items-center justify-center rounded text-xs font-medium transition-all shrink-0";
 
                     if (isBeforeTaskCreated || isPastDate) {
                       // Before task created or past dates - empty boxes, not clickable
@@ -163,7 +134,7 @@ function GridChart({ tasks, setNewActivity }) {
                     } else if (isToday) {
                       // Today - clickable
                       if (isCompleted) {
-                        boxClasses += " bg-green-500 border-2 border-green-600 shadow-md  cursor-pointer text-white font-bold";
+                        boxClasses += " bg-green-500 border-2 border-green-600 shadow-md cursor-pointer text-white font-bold";
                       } else {
                         boxClasses += " bg-gray-700 border-2 border-yellow-500 cursor-pointer hover:bg-gray-600 hover:border-yellow-400";
                       }
@@ -179,12 +150,7 @@ function GridChart({ tasks, setNewActivity }) {
                         disabled={!isClickable}
                         className={boxClasses}
                         type="button"
-                        title={`${date.toLocaleDateString()} ${
-                          isBeforeTaskCreated ? "(Before task created)" : 
-                          isPastDate ? "(Past - Locked)" : 
-                          isToday ? "(Today - Clickable)" : 
-                          "(Future)"
-                        }`}
+                        title={`${date.toLocaleDateString()}`}
                       >
                         {isCompleted && "✓"}
                       </button>
