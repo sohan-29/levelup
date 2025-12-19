@@ -94,16 +94,11 @@ function GridChart({ tasks, setNewActivity }) {
   };
 
   return (
-    <div className="flex-1 p-4">
+    <div className="flex-1 p-0.5">
       {/* Calendar Header */}
       <div className="overflow-x-auto">
         {/* Date Header Row */}
         <div className="flex sticky top-0 z-10">
-          {/* Task Title Column Header */}
-          <div className="w-48 shrink-0 flex items-center px-5 py-3">
-            <p className="text-xl font-bold text-white">Activities</p>
-          </div>
-
           {/* Date Headers */}
           <div className="flex gap-1">
             {allDates.map((date, idx) => {
@@ -130,21 +125,14 @@ function GridChart({ tasks, setNewActivity }) {
           </div>
         </div>
 
-        {/* Activity Rows */}
+        {/* Activity Rows - Just Calendar Boxes */}
         <div className="mt-4 space-y-2">
           {tasks.map((task) => {
             const taskCreatedDate = new Date(task.createdDate);
             taskCreatedDate.setHours(0, 0, 0, 0);
-            const streak = calculateStreak(task.dailyStatus, taskCreatedDate);
 
             return (
-              <div key={task._id} className="flex gap-1 items-center">
-                {/* Task Name and Streak */}
-                <div className="w-48 shrink-0 px-5 py-2">
-                  <p className="text-white text-sm font-semibold truncate">{task.title}</p>
-                  <p className="text-xs text-yellow-200 mt-1">🔥 {streak}</p>
-                </div>
-
+              <div key={task._id} className="flex gap-1">
                 {/* Date Status Boxes */}
                 <div className="flex gap-1">
                   {allDates.map((date, idx) => {
@@ -159,7 +147,7 @@ function GridChart({ tasks, setNewActivity }) {
                     const isToday = date.toDateString() === today.toDateString();
                     const isClickable = isToday;
 
-                    let boxClasses = "w-12 h-8 flex items-center justify-center rounded text-sm font-medium transition-all cursor-default";
+                    let boxClasses = "w-12 h-8 flex items-center justify-center rounded text-sm font-medium transition-all cursor-default my-1";
 
                     if (isBeforeTaskCreated || isPastDate) {
                       // Before task created or past dates
@@ -187,7 +175,7 @@ function GridChart({ tasks, setNewActivity }) {
                         disabled={!isClickable}
                         className={boxClasses}
                         type="button"
-                        title={`${date.toLocaleDateString()}`}
+                        title={`${task.title} - ${date.toLocaleDateString()}`}
                       >
                         {isCompleted && "✓"}
                       </button>

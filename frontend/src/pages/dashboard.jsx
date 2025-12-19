@@ -58,7 +58,7 @@ const Dashboard = () => {
                 <div className="mt-6 text-white">
                     <h2 className="text-center text-2xl mb-4">Welcome, {user.username}!</h2>
                     <Suspense fallback={<Loader />}>
-                        <div className="flex text-center mb-6">
+                        <div className="flex text-center my-6 mt-13">
                             <Activities setNewActivity={setNewActivity} />
                             <GridChart tasks={tasks} setNewActivity={setNewActivity} />
                         </div>
