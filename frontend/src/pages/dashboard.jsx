@@ -62,8 +62,8 @@ const Dashboard = () => {
                         <div className="flex text-center my-6 mt-13">
                             <Activities setNewActivity={setNewActivity} />
                             <GridChart tasks={tasks} setNewActivity={setNewActivity} />
-                            <Graph tasks={tasks} />
                         </div>
+                            <Graph tasks={tasks} />
                     </Suspense>
                 </div>
             )}
