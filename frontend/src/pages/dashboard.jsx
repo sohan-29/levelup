@@ -63,7 +63,7 @@ const Dashboard = () => {
                             <Activities setNewActivity={setNewActivity} />
                             <GridChart tasks={tasks} setNewActivity={setNewActivity} />
                         </div>
-                            <Graph tasks={tasks} />
+                            <Graph key={newActivity} tasks={tasks} />
                     </Suspense>
                 </div>
             )}
