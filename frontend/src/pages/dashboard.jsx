@@ -6,6 +6,7 @@ import Header from "../components/header";
 import axios from "axios";
 import Loader from "../components/loader";
 import Activities from "../components/activities";
+import Graph from "../components/graph";
 
 const Dashboard = () => {
     const { authenticated, setAuthenticated } = useContext(AuthContext);
@@ -61,6 +62,7 @@ const Dashboard = () => {
                         <div className="flex text-center my-6 mt-13">
                             <Activities setNewActivity={setNewActivity} />
                             <GridChart tasks={tasks} setNewActivity={setNewActivity} />
+                            <Graph tasks={tasks} />
                         </div>
                     </Suspense>
                 </div>

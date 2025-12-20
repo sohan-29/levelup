@@ -12,7 +12,11 @@ router.post('/signup', async (req, res) => {
         await user.save();
         res.status(201).json({ message: 'User created successfully' });
     } catch (error) {
-        res.status(400).json({ error: error.message });
+        if (error.code === 11000) {
+            res.status(400).send('Username or email already exists');
+        } else {
+            res.status(400).send(error.message);
+        }
     }
 });
 
@@ -22,7 +26,7 @@ router.post('/login', async (req, res) => {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
         if (!user || !(await user.comparePassword(password))) {
-            return res.status(401).json({ error: 'Invalid credentials' });
+            return res.status(401).send('Invalid credentials');
         }
         const secret = process.env.JWT_SECRET || 'your-secret-key';
         const token = jwt.sign({ id: user._id, email: user.email }, secret, { expiresIn: '1d' });
@@ -37,7 +41,7 @@ router.post('/login', async (req, res) => {
         // Also return token in response body so SPA can store it if needed
         res.json({ message: 'successfully logged in!', token });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.status(500).send(error.message);
     }
 });
 

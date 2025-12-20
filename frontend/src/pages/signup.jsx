@@ -1,6 +1,8 @@
 import { useState } from "react";
 import Header from "../components/header";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import toast from "react-hot-toast";
 
 const SignupForm = () => {
     const [view, setview] = useState("🤫");
@@ -11,6 +13,7 @@ const SignupForm = () => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const navigate = useNavigate();
     const viewPassword = (id) => {
         if (id === "password") {
             if (view === "🤫") {
@@ -37,11 +40,12 @@ const SignupForm = () => {
             email,
             password
         }).then((response) => {
-            alert(response.data.message);
+            toast.success(response.data.message);
+            navigate("/login");
             sessionStorage.setItem("authToken", );
-            window.location.href = "/login";
         }).catch((error) => {
-            alert(error.response.data.error);
+            console.log(error)
+            toast.error(error.response.data);
         });
     }
     return (
