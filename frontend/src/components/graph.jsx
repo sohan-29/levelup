@@ -1,4 +1,5 @@
 const Graph = ({ tasks }) => {
+  const totalTasks = tasks.length;
   /* -------- LOCAL DATE FORMATTER -------- */
   const formatDate = (date) =>
     date.getFullYear() + "-" +
@@ -62,15 +63,15 @@ const Graph = ({ tasks }) => {
     <div className="w-5xl mx-auto bg-[#242424] p-3 rounded-xl overflow-x-auto">
       <div className="grid grid-flow-col gap-3">
         {weeks.map((week, wIdx) => (
-          <div key={wIdx} className="grid grid-rows-7 gap-2">
+          <div key={wIdx} className="grid grid-rows-7 gap-1">
             {week.map((day, dIdx) => {
               if (!day || !day.visible) {
                 return <div key={dIdx} className="w-3 h-3 bg-transparent" />;
               }
-
               let bg = "#333333";
-              if (day.value === 1) bg = "#fde68a";
-              else if (day.value >= 2) bg = "#fbbf24";
+              if (day.value >= 1 && day.value <= totalTasks/3) bg = "#FFE069";
+              else if (day.value > totalTasks/3 && day.value <= totalTasks/2) bg = "#FFD644"
+              else if (day.value > totalTasks/3 && day.value <= totalTasks) bg = "#FFBF00";
               const date = day.date.split("-").reverse().join("/")
               return (
                 <div
