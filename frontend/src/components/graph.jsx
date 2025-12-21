@@ -55,12 +55,11 @@ const Graph = ({ tasks }) => {
     // 14-block month gap
     if (month !== 11) {
       weeks.push(Array(7).fill(null));
-      weeks.push(Array(7).fill(null));
     }
   }
 
   return (
-    <div className="bg-[#242424] p-3 rounded-xl overflow-x-auto">
+    <div className="w-5xl mx-auto bg-[#242424] p-3 rounded-xl overflow-x-auto">
       <div className="grid grid-flow-col gap-3">
         {weeks.map((week, wIdx) => (
           <div key={wIdx} className="grid grid-rows-7 gap-2">
