@@ -1,66 +1,92 @@
-import { useEffect } from 'react';
-import ApexCharts from 'apexcharts';
-
 const Graph = ({ tasks }) => {
-  useEffect(() => {
-    if (!tasks?.length) return;
+  /* -------- LOCAL DATE FORMATTER -------- */
+  const formatDate = (date) =>
+    date.getFullYear() + "-" +
+    String(date.getMonth() + 1).padStart(2, "0") + "-" +
+    String(date.getDate()).padStart(2, "0");
 
-    // Find earliest date across all tasks
-    const earliestDate = new Date(
-      Math.min(...tasks.map(task => new Date(task.createdDate).getTime()))
-    );
-    earliestDate.setHours(0, 0, 0, 0);
+  /* -------- ACTIVITY MAP -------- */
+  const activityMap = {};
+  tasks.forEach(task => {
+    task.dailyStatus.forEach(s => {
+      if (s.completed) {
+        const d = formatDate(new Date(s.date));
+        activityMap[d] = (activityMap[d] || 0) + 1;
+      }
+    });
+  });
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
+  const year = new Date().getFullYear();
+  const weeks = [];
 
-    // Generate all dates from earliest to today
-    const allDates = [];
-    let currentDate = new Date(earliestDate);
-    while (currentDate <= today) {
-      allDates.push(new Date(currentDate));
-      currentDate.setDate(currentDate.getDate() + 1);
+  /* -------- BUILD MONTHS -------- */
+  for (let month = 0; month < 12; month++) {
+    const monthStart = new Date(year, month, 1);
+    const monthEnd = new Date(year, month + 1, 0);
+
+    const start = new Date(monthStart);
+    start.setDate(start.getDate() - start.getDay());
+
+    const end = new Date(monthEnd);
+    end.setDate(end.getDate() + (6 - end.getDay()));
+
+    let current = new Date(start);
+
+    while (current <= end) {
+      const week = [];
+
+      for (let i = 0; i < 7; i++) {
+        const dateStr = formatDate(current);
+
+        week.push({
+          date: dateStr,
+          value: activityMap[dateStr] || 0,
+          visible:
+            current.getMonth() === month &&
+            current.getFullYear() === year
+        });
+
+        current.setDate(current.getDate() + 1);
+      }
+
+      weeks.push(week);
     }
 
-    const series = tasks.map(task => {
-      let completedDays = 0;
-      const data = allDates.map(date => {
-        const status = task.dailyStatus?.find(
-          s => new Date(s.date).toDateString() === date.toDateString()
-        );
+    // 14-block month gap
+    if (month !== 11) {
+      weeks.push(Array(7).fill(null));
+      weeks.push(Array(7).fill(null));
+    }
+  }
 
-        if (status?.completed) {
-          completedDays++; // increase cumulative count
-        }
+  return (
+    <div className="bg-[#242424] p-3 rounded-xl overflow-x-auto">
+      <div className="grid grid-flow-col gap-3">
+        {weeks.map((week, wIdx) => (
+          <div key={wIdx} className="grid grid-rows-7 gap-2">
+            {week.map((day, dIdx) => {
+              if (!day || !day.visible) {
+                return <div key={dIdx} className="w-3 h-3 bg-transparent" />;
+              }
 
-        return {
-          x: date.toISOString().split('T')[0], // date only
-          y: completedDays
-        };
-      });
-
-      return { name: task.title, data };
-    });
-
-    const chart = new ApexCharts(document.querySelector("#chart"), {
-      series,
-      chart: { type: 'line', height: 350, toolbar: { show: false } },
-      stroke: { curve: 'smooth' },
-      title: { text: 'Completed Days Over Time', align: 'left' },
-      xaxis: { type: 'category', title: { text: 'Date' } },
-      yaxis: { title: { text: 'Total Completed Days' }, min: 0 },
-      markers: { size: 4, color: ['#000'] },
-      legend: { show: true },
-      tooltip: { theme: 'dark' },
-      dataLabels: { enabled: false, color: ["#000"] },
-      zoom: { enabled: false }
-    });
-
-    chart.render();
-    return () => chart.destroy();
-  }, [tasks]);
-
-  return <div id="chart" style={{ width: '90%', margin: 'auto' }} />;
+              let bg = "#333333";
+              if (day.value === 1) bg = "#fde68a";
+              else if (day.value >= 2) bg = "#fbbf24";
+              const date = day.date.split("-").reverse().join("/")
+              return (
+                <div
+                  key={dIdx}
+                  title={`${date} — ${day.value} completed`}
+                  className="w-3 h-3 rounded-sm"
+                  style={{ backgroundColor: bg }}
+                />
+              );
+            })}
+          </div>
+        ))}
+      </div>
+    </div>
+  );
 };
 
 export default Graph;
