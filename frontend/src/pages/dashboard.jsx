@@ -7,6 +7,7 @@ import axios from "axios";
 import Loader from "../components/loader";
 import Activities from "../components/activities";
 import Graph from "../components/graph";
+import Footer from "../components/footer";
 
 const Dashboard = () => {
     const { authenticated, setAuthenticated } = useContext(AuthContext);
@@ -67,6 +68,7 @@ const Dashboard = () => {
                     </Suspense>
                 </div>
             )}
+            <Footer />
         </div>
     )
 };
