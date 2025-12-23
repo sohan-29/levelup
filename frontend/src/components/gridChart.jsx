@@ -1,15 +1,15 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
 
 function GridChart({ tasks, setNewActivity }) {
   const [updatingDate, setUpdatingDate] = useState(null);
-
+  const gridchart = useRef();
+  const scrollContainerRef = useRef();
   if (!tasks || tasks.length === 0) {
     return <div className="text-gray-400 p-4">No activities yet. Start building your streak!</div>;
   }
 
-  // Find the earliest created date across all tasks
   const earliestDate = new Date(
     Math.min(...tasks.map(task => new Date(task.createdDate).getTime()))
   );
@@ -25,6 +25,12 @@ function GridChart({ tasks, setNewActivity }) {
     allDates.push(new Date(currentDate));
     currentDate.setDate(currentDate.getDate() + 1);
   }
+
+  useEffect(() => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollWidth;
+    }
+  }, [allDates]);
 
   const calculateStreak = (dailyStatus, taskCreatedDate) => {
     let streakCount = 0;
@@ -94,13 +100,13 @@ function GridChart({ tasks, setNewActivity }) {
   };
 
   return (
-    <div className="flex-1 p-0.5">
+    <div ref={gridchart} gridChart="gc" className="flex-1 p-0.5 overflow-x-auto hide-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
       {/* Calendar Header */}
-      <div className="overflow-x-auto">
+      <div ref={scrollContainerRef} className="overflow-x-auto">
         {/* Date Header Row */}
         <div className="flex sticky top-0 z-10">
           {/* Date Headers */}
-          <div className="flex gap-1">
+          <div className="flex gap-0.5 md:gap-1">
             {allDates.map((date, idx) => {
               const isToday = date.toDateString() === today.toDateString();
               const dayOfMonth = date.getDate();
@@ -109,14 +115,14 @@ function GridChart({ tasks, setNewActivity }) {
               return (
                 <div
                   key={idx}
-                  className={`w-12 shrink-0 flex flex-col items-center justify-center py-2 text-center transition-all ${
+                  className={`w-6 md:w-8 lg:w-12 shrink-0 flex flex-col items-center justify-center py-1 md:py-2 text-center transition-all ${
                     isToday ? "bg-yellow-200 text-black rounded" : ""
                   }`}
                 >
                   <div className={`text-xs font-semibold ${isToday ? "" : "text-gray-400"}`}>
                     {dayName}
                   </div>
-                  <div className={`text-sm font-bold ${isToday ? "" : "text-white"}`}>
+                  <div className={`text-xs md:text-sm font-bold ${isToday ? "" : "text-white"}`}>
                     {dayOfMonth}
                   </div>
                 </div>
@@ -126,15 +132,15 @@ function GridChart({ tasks, setNewActivity }) {
         </div>
 
         {/* Activity Rows - Just Calendar Boxes */}
-        <div className="mt-4 space-y-2">
+        <div className="mt-2 md:mt-4 space-y-1 md:space-y-2">
           {tasks.map((task) => {
             const taskCreatedDate = new Date(task.createdDate);
             taskCreatedDate.setHours(0, 0, 0, 0);
 
             return (
-              <div key={task._id} className="flex gap-1">
+              <div key={task._id} className="flex gap-0.5 md:gap-1">
                 {/* Date Status Boxes */}
-                <div className="flex gap-1">
+                <div className="flex gap-0.5 md:gap-1">
                   {allDates.map((date, idx) => {
                     const isCompleted = task.dailyStatus?.some(
                       (status) =>
@@ -147,7 +153,7 @@ function GridChart({ tasks, setNewActivity }) {
                     const isToday = date.toDateString() === today.toDateString();
                     const isClickable = isToday;
 
-                    let boxClasses = "w-12 h-8 flex items-center justify-center rounded text-sm font-medium transition-all cursor-default my-1";
+                    let boxClasses = "w-6 h-4 md:w-8 md:h-6 lg:w-12 lg:h-8 flex items-center justify-center rounded text-xs md:text-sm font-medium transition-all cursor-default my-0.5 md:my-1";
 
                     if (isBeforeTaskCreated || isPastDate) {
                       // Before task created or past dates

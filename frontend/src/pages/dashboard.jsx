@@ -53,18 +53,22 @@ const Dashboard = () => {
     const GridChart = React.lazy(() => import('../components/gridChart'));
 
     return (
-        <div className="min-h-screen min-w-screen bg-[#242424]">
+        <div className="relative min-h-screen min-w-screen bg-[#242424]">
             <Header />
-            <h1 className="w-full text-center text-amber-200 bold text-lg sm:text-xl md:text-2xl lg:text-3xl mt-6">Build your future by making history !!</h1>
+            <h1 className="w-full text-center text-amber-200 font-bold text-lg sm:text-xl md:text-2xl lg:text-3xl mt-6">
+                Build your future by making history !!
+            </h1>
             {user && (
                 <div className="mt-6 text-white">
                     <h2 className="text-center text-2xl mb-4">Welcome, {user.username}!</h2>
                     <Suspense fallback={<Loader />}>
-                        <div className="flex text-center my-6 mt-13">
+                        <div className="flex flex-row gap-2 md:gap-6 my-6 px-3">
                             <Activities setNewActivity={setNewActivity} />
-                            <GridChart tasks={tasks} setNewActivity={setNewActivity} />
+                            <div className="flex-1 flex flex-col gap-2">
+                                <GridChart tasks={tasks} setNewActivity={setNewActivity} />
+                                <Graph key={newActivity} tasks={tasks} />
+                            </div>
                         </div>
-                            <Graph key={newActivity} tasks={tasks} />
                     </Suspense>
                 </div>
             )}
