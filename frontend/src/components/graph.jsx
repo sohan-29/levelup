@@ -1,5 +1,10 @@
+import { useEffect, useRef } from "react";
+
 const Graph = ({ tasks }) => {
+  const graph = useRef(null);
+
   const totalTasks = tasks.length;
+
   /* -------- LOCAL DATE FORMATTER -------- */
   const formatDate = (date) =>
     date.getFullYear() + "-" +
@@ -59,8 +64,16 @@ const Graph = ({ tasks }) => {
     }
   }
 
+  useEffect(() => {
+    const todayStr = formatDate(new Date());
+    const el = graph.current?.querySelector(`[data-date="${todayStr}"]`);
+    if (el) {
+      el.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+    }
+  }, [tasks]);
+
   return (
-    <div className="w-5xl mx-auto bg-[#242424] p-3 rounded-xl overflow-x-auto">
+    <div ref={graph} className="w-5xl mx-auto bg-[#242424] p-3 rounded-xl overflow-x-auto">
       <div className="grid grid-flow-col gap-3">
         {weeks.map((week, wIdx) => (
           <div key={wIdx} className="grid grid-rows-7 gap-1">
@@ -69,13 +82,18 @@ const Graph = ({ tasks }) => {
                 return <div key={dIdx} className="w-3 h-3 bg-transparent" />;
               }
               let bg = "#333333";
-              if (day.value >= 1 && day.value <= totalTasks/3) bg = "#FFE069";
-              else if (day.value > totalTasks/3 && day.value <= totalTasks/2) bg = "#FFD644"
-              else if (day.value > totalTasks/3 && day.value <= totalTasks) bg = "#FFBF00";
-              const date = day.date.split("-").reverse().join("/")
+              if (day.value >= 1 && day.value <= totalTasks / 3) {
+                bg = "#FFEFA1";
+              } else if (day.value > totalTasks / 3 && day.value <= (2 * totalTasks) / 3) {
+                bg = "#FFD84D";
+              } else if (day.value > (2 * totalTasks) / 3 && day.value <= totalTasks) {
+                bg = "#FFBF00";
+              }
+              const date = day.date.split("-").reverse().join("/");
               return (
                 <div
                   key={dIdx}
+                  data-date={day.date}
                   title={`${date} — ${day.value} completed`}
                   className="w-3 h-3 rounded-sm"
                   style={{ backgroundColor: bg }}
