@@ -3,6 +3,7 @@ import Header from "../components/header";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
+import Footer from "../components/footer";
 
 const SignupForm = () => {
     const [view, setview] = useState("🤫");
@@ -81,10 +82,11 @@ const SignupPage = () => {
     return (
         <div className="relative flex flex-col items-center min-w-screen min-h-screen bg-[#242424] text-white">
             <Header />
-            <div className="flex flex-col justify-center items-center mt-20">
-                <h1 className="text-4xl md:text-5xl text-amber-200 mt-20 mb-6">Signup</h1>
+            <div className="flex flex-col justify-center items-center min-h-screen">
+                <h1 className="text-4xl md:text-5xl text-amber-200 mb-6">Signup</h1>
                 <SignupForm />
             </div>
+            <Footer />
         </div>
     );
 };

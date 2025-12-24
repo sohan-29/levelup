@@ -1,5 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import Header from '../components/header';
+import Footer from '../components/footer';
 const LandingPage = () => {
     const navigate = useNavigate();
     return (
@@ -10,6 +11,7 @@ const LandingPage = () => {
                 <p className='text-sm mb-8'> Step into a journey where every streak, every effort, and every win builds the foundation of your greatest comeback.</p>
                 <button className='mt-5 text-2xl font-medium p-3 bg-white text-gray-800 rounded-4xl px-5 hover:border-amber-200 border-3 hover:text-gray-800' onClick={()=>navigate("/login")}>Get Started</button>
             </div>
+            <Footer />
         </div>
     );
 }
