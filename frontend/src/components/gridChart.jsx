@@ -100,7 +100,7 @@ function GridChart({ tasks, setNewActivity }) {
   };
 
   return (
-    <div ref={gridchart} gridChart="gc" className="flex-1 p-0.5 overflow-x-auto hide-scrollbar" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+    <div ref={gridchart} gridChart="gc" className="flex-1 p-0.5 overflow-x-auto hide-scrollbar mt-3" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
       {/* Calendar Header */}
       <div ref={scrollContainerRef} className="overflow-x-auto">
         {/* Date Header Row */}
@@ -115,7 +115,7 @@ function GridChart({ tasks, setNewActivity }) {
               return (
                 <div
                   key={idx}
-                  className={`w-7 md:w-9 lg:w-12 shrink-0 flex flex-col items-center justify-center py-1 md:py-2 text-center transition-all ${
+                  className={`w-7 md:w-9 lg:w-12 xl:w-13 shrink-0 flex flex-col items-center justify-center py-1 md:py-2 text-center transition-all ${
                     isToday ? "bg-yellow-200 text-black rounded" : ""
                   }`}
                 >
@@ -132,7 +132,7 @@ function GridChart({ tasks, setNewActivity }) {
         </div>
 
         {/* Activity Rows - Just Calendar Boxes */}
-        <div className="mt-2 md:mt-4 space-y-1 md:space-y-2">
+        <div className="mt-2 md:mt-4 space-y-1 md:space-y-1.5">
           {tasks.map((task) => {
             const taskCreatedDate = new Date(task.createdDate);
             taskCreatedDate.setHours(0, 0, 0, 0);
@@ -153,7 +153,7 @@ function GridChart({ tasks, setNewActivity }) {
                     const isToday = date.toDateString() === today.toDateString();
                     const isClickable = isToday;
 
-                    let boxClasses = "w-7 h-5 md:w-9 md:h-7 lg:w-12 lg:h-8 flex items-center justify-center rounded text-xs md:text-sm font-medium transition-all cursor-default my-0.5 md:my-1";
+                    let boxClasses = "w-7 h-5 md:w-9 md:h-7 lg:w-12 lg:h-8 xl:w-13 xl:h-10 flex items-center justify-center rounded text-xs md:text-sm font-medium transition-all cursor-default my-0.5 md:my-1 xl:my-0.5";
 
                     if (isBeforeTaskCreated || isPastDate) {
                       // Before task created or past dates

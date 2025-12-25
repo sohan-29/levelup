@@ -50,7 +50,7 @@ const Dashboard = () => {
 
     if (loading) return <div className="min-w-screen"><Loader /></div>
     const GridChart = React.lazy(() => import('../components/gridChart'));
-    const Graph = React.lazy(()=> import('../components/graph'));
+    const Graph = React.lazy(() => import('../components/graph'));
 
     return (
         <div className="relative min-h-screen min-w-screen bg-[#242424]">
@@ -59,15 +59,15 @@ const Dashboard = () => {
                 Build your future by making history !!
             </h1>
             {user && (
-                <div className="mt-6 text-white mx-auto sm:mx-0 md:mx-auto lg:mx-0 w-sm sm:w-lg md:w-2xl lg:w-5xl xl:w-screen">
-                    <h2 className="text-center text-2xl mb-4">Welcome, {user.username}!</h2>
+                <div className="mt-6 text-white mx-auto sm:px-3 md:mx-auto lg:mx-0 w-sm sm:w-lg md:w-2xl lg:w-5xl xl:w-screen">
+                    <h2 className="text-center text-xl sm:text-2xl mb-4">Welcome, {user.username}!</h2>
                     <Suspense fallback={<Loader />}>
-                        <div className="flex flex-row gap-2 w-full md:gap-6 my-6 md:px-4 lg:px-11">
-                            <Activities setNewActivity={setNewActivity} />
-                            <div className="flex flex-col gap-2 overflow-x-auto w-full">
+                        <div className="flex flex-col gap-2 w-full md:gap-6 my-6 px-3 md:px-4 lg:px-11">
+                            <div className="flex flex-row gap-6 sm:gap-10 overflow-x-auto">
+                                <Activities setNewActivity={setNewActivity} />
                                 <GridChart tasks={tasks} setNewActivity={setNewActivity} />
-                                <Graph key={newActivity} tasks={tasks} />
                             </div>
+                            <Graph key={newActivity} tasks={tasks} />
                         </div>
                     </Suspense>
                 </div>
