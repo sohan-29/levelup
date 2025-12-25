@@ -62,12 +62,19 @@ const Dashboard = () => {
                 <div className="mt-6 text-white mx-auto sm:px-3 md:mx-auto lg:mx-0 w-sm sm:w-lg md:w-2xl lg:w-5xl xl:w-screen">
                     <h2 className="text-center text-xl sm:text-2xl mb-4">Welcome, {user.username}!</h2>
                     <Suspense fallback={<Loader />}>
-                        <div className="flex flex-col gap-2 w-full md:gap-6 my-6 px-3 md:px-4 lg:px-11">
+                        <div className="sm:hidden flex flex-col gap-2 w-full md:gap-6 my-6 px-3 md:px-4 lg:px-11">
                             <div className="flex flex-row gap-6 sm:gap-10 overflow-x-auto">
                                 <Activities setNewActivity={setNewActivity} />
                                 <GridChart tasks={tasks} setNewActivity={setNewActivity} />
                             </div>
                             <Graph key={newActivity} tasks={tasks} />
+                        </div>
+                        <div className="hidden sm:flex flex-row gap-2 w-full md:gap-6 my-6 px-3 md:px-4 lg:px-11">
+                            <Activities setNewActivity={setNewActivity} />
+                            <div className="flex flex-col gap-6 sm:gap-10 overflow-x-auto">
+                                <GridChart tasks={tasks} setNewActivity={setNewActivity} />
+                                <Graph key={newActivity} tasks={tasks} />
+                            </div>
                         </div>
                     </Suspense>
                 </div>

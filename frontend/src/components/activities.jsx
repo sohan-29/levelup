@@ -138,8 +138,8 @@ const Activities = ({ setNewActivity: parentSetNewActivity }) => {
     };
 
     return (
-        <div>
-            <h1 className="text-md md:text-lg lg:text-xl font-bold my-4.5 md:my-6.5 lg:my-7">Your Daily Activities</h1>
+        <div className="sm:w-44 flex-none">
+            <h1 className="text-sm md:text-xl lg:text-xl font-bold my-5 md:my-6.5 lg:my-7 w-full">Daily Activities</h1>
             {tasks.length == 0 ? (
                 <div>
                     <p className="text-md md:text-lg text-yellow-200">No activities found.</p>
