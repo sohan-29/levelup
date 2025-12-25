@@ -138,7 +138,7 @@ const Activities = ({ setNewActivity: parentSetNewActivity }) => {
     };
 
     return (
-        <div onClick={() => setAddActivity(false)} className="m-3 sm:w-69">
+        <div>
             <h1 className="text-2xl font-bold mb-6 lg:mb-7">Your Daily Activities</h1>
             {tasks.length == 0 ? (
                 <div>
@@ -152,8 +152,8 @@ const Activities = ({ setNewActivity: parentSetNewActivity }) => {
                             taskCreatedDate.setHours(0, 0, 0, 0);
                             const streak = calculateStreak(task.dailyStatus, taskCreatedDate);
                             return (
-                                <li key={index} className="relative lg:mb-2 mx-1 md:mx-5 px-4 flex justify-between items-center text-white h-10">
-                                    <span className="flex-1 text-sm font-semibold truncate">{task.title}</span>
+                                <li key={index} className="relative lg:mb-2 flex justify-between items-center text-white h-10">
+                                    <span className="flex-1 text-sm sm:text-md md:text-lg font-semibold truncate">{task.title}</span>
                                     <span className="flex items-center gap-1 ml-2 text-xs text-yellow-200 shrink-0">
                                         🔥 {streak}
                                     </span>

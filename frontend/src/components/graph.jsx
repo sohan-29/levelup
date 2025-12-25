@@ -64,7 +64,7 @@ const Graph = ({ tasks }) => {
   const monthNames = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
 
   return (
-    <div ref={graph} className="w-3xs sm:w-xl bg-[#242424] p-3 rounded-xl overflow-x-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+    <div ref={graph} className="bg-[#242424] p-3 rounded-xl overflow-x-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
       <div className="grid grid-flow-col gap-3">
         {weeks.map((week, wIdx) => (
           <div key={wIdx} className="flex flex-col items-center">

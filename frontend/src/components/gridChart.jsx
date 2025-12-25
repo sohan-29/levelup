@@ -115,7 +115,7 @@ function GridChart({ tasks, setNewActivity }) {
               return (
                 <div
                   key={idx}
-                  className={`w-6 md:w-8 lg:w-12 shrink-0 flex flex-col items-center justify-center py-1 md:py-2 text-center transition-all ${
+                  className={`w-7 md:w-9 lg:w-12 shrink-0 flex flex-col items-center justify-center py-1 md:py-2 text-center transition-all ${
                     isToday ? "bg-yellow-200 text-black rounded" : ""
                   }`}
                 >
@@ -153,7 +153,7 @@ function GridChart({ tasks, setNewActivity }) {
                     const isToday = date.toDateString() === today.toDateString();
                     const isClickable = isToday;
 
-                    let boxClasses = "w-6 h-4 md:w-8 md:h-6 lg:w-12 lg:h-8 flex items-center justify-center rounded text-xs md:text-sm font-medium transition-all cursor-default my-0.5 md:my-1";
+                    let boxClasses = "w-7 h-5 md:w-9 md:h-7 lg:w-12 lg:h-8 flex items-center justify-center rounded text-xs md:text-sm font-medium transition-all cursor-default my-0.5 md:my-1";
 
                     if (isBeforeTaskCreated || isPastDate) {
                       // Before task created or past dates
