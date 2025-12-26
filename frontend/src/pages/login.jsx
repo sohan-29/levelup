@@ -23,7 +23,7 @@ const LoginForm = () => {
     const submitData = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:3000/api/auth/login', {
+            const response = await axios.post('https://levelup-7vvn.onrender.com/api/auth/login', {
                 email: email.trim(),
                 password
             }, { withCredentials: true });

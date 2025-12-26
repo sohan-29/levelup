@@ -34,7 +34,7 @@ const AddActivity = ({ setNewActivity, parentSetNewActivity }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("http://localhost:3000/api/activities/activity", {
+            const response = await axios.post("https://levelup-7vvn.onrender.com/api/activities/activity", {
                 "title": title,
                 "createdDate": new Date().toISOString()
             }, { withCredentials: true });
@@ -127,7 +127,7 @@ const Activities = ({ setNewActivity: parentSetNewActivity }) => {
 
     const handleDelete = async (id) => {
         try {
-            const response = await axios.delete(`http://localhost:3000/api/activities/${id}`, { withCredentials: true });
+            const response = await axios.delete(`https://levelup-7vvn.onrender.com/api/activities/${id}`, { withCredentials: true });
             setNewActivity(prev => !prev);
             parentSetNewActivity(prev => !prev);
             toast.success(response.data.message)

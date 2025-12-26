@@ -76,7 +76,7 @@ function GridChart({ tasks, setNewActivity }) {
 
       const newStreak = calculateStreak(updatedDailyStatus, taskCreatedDate);
       const response = await axios.put(
-        `http://localhost:3000/api/activities/${task._id}`,
+        `https://levelup-7vvn.onrender.com/api/activities/${task._id}`,
         {
           dailyStatus: updatedDailyStatus,
           streak: newStreak,

@@ -36,7 +36,7 @@ function App() {
         if (localToken) {
           axios.defaults.headers.common['Authorization'] = `Bearer ${localToken}`;
         }
-        const response = await axios.get('http://localhost:3000/api/auth/verify', { withCredentials: true });
+        const response = await axios.get('https://levelup-7vvn.onrender.com/api/auth/verify', { withCredentials: true });
         if (response.data && response.data.authenticated) {
           handleSetAuthenticated(true);
         } else {
@@ -53,7 +53,7 @@ function App() {
 
   const logout = async () => {
     try {
-      await axios.post('http://localhost:3000/api/auth/logout', {}, { withCredentials: true });
+      await axios.post('https://levelup-7vvn.onrender.com/api/auth/logout', {}, { withCredentials: true });
     } catch (error) {
       console.error('Logout error:', error);
     } finally {

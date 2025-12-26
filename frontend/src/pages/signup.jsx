@@ -36,7 +36,7 @@ const SignupForm = () => {
     }
     const submitData = async (e) => {
         e.preventDefault();
-        await axios.post('http://localhost:3000/api/auth/signup', {
+        await axios.post('https://levelup-7vvn.onrender.com/api/auth/signup', {
             username,
             email,
             password

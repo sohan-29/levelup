@@ -19,7 +19,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const res = await axios.get('http://localhost:3000/api/users/profile', { withCredentials: true });
+                const res = await axios.get('https://levelup-7vvn.onrender.com/api/users/profile', { withCredentials: true });
                 setUser(res.data);
             } catch (err) {
                 setAuthenticated(false);
@@ -32,7 +32,7 @@ const Dashboard = () => {
         };
         const fetchActivities = async () => {
             try {
-                const response = await axios.get("http://localhost:3000/api/activities/", { withCredentials: true });
+                const response = await axios.get("https://levelup-7vvn.onrender.com/api/activities/", { withCredentials: true });
                 setTasks(response.data);
                 setNewActivity(false);
             } catch (error) {
