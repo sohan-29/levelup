@@ -6,9 +6,14 @@ const cookieParser = require('cookie-parser');
 const app = express();
 const PORT = 3000;
 
+const allowedOrigins = [
+  'http://localhost:5173',
+  'https://level-up-ko45.onrender.com'
+];
+
 // Middleware
 app.use(cors({
-origin: 'http://localhost:5173',
+origin: allowedOrigins,
 credentials: true,
 allowedHeaders: ['Content-Type', 'Authorization'],
 methods: ['GET','POST','PUT','DELETE','OPTIONS']
