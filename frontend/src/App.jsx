@@ -7,6 +7,11 @@ import { Toaster } from 'react-hot-toast'
 import { createContext, useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import Dashboard from './pages/dashboard'
+
+// Firebase imports
+import { messaging } from './firebase'
+import { getToken, onMessage } from 'firebase/messaging'
+
 const api = import.meta.env.VITE_API_URL;
 
 export const AuthContext = createContext(null);
@@ -50,6 +55,33 @@ function App() {
       }
     };
     checkAuth();
+  }, []);
+
+  // 🔹 Setup Firebase Push Notifications
+  useEffect(() => {
+    const setupNotifications = async () => {
+      try {
+        const permission = await Notification.requestPermission();
+        if (permission === "granted") {
+          const token = await getToken(messaging, { vapidKey: import.meta.env.VITE_FIREBASE_VAPID_KEY });
+          if (token) {
+            console.log("FCM Token:", token);
+            // Send token to backend to store for this user
+            await axios.post(`${api}/notifications/register`, { token }, { withCredentials: true });
+          }
+        }
+      } catch (err) {
+        console.error("Notification setup error:", err);
+      }
+
+      // Listen for foreground messages
+      onMessage(messaging, (payload) => {
+        console.log("Message received:", payload);
+        alert(`${payload.notification.title}: ${payload.notification.body}`);
+      });
+    };
+
+    setupNotifications();
   }, []);
 
   const logout = async () => {
