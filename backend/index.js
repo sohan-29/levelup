@@ -8,7 +8,8 @@ const PORT = 3000;
 
 const allowedOrigins = [
   'http://localhost:5173',
-  'https://level-up-ko45.onrender.com'
+  'https://level-up-ko45.onrender.com',
+  'https://levelup-now.netlify.app/'
 ];
 
 // Middleware
