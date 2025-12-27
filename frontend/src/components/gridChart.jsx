@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import toast from "react-hot-toast";
+const api = import.meta.env.VITE_API_URL;
 
 function GridChart({ tasks, setNewActivity }) {
   const [updatingDate, setUpdatingDate] = useState(null);
@@ -76,7 +77,7 @@ function GridChart({ tasks, setNewActivity }) {
 
       const newStreak = calculateStreak(updatedDailyStatus, taskCreatedDate);
       const response = await axios.put(
-        `https://levelup-7vvn.onrender.com/api/activities/${task._id}`,
+        `${api}/activities/${task._id}`,
         {
           dailyStatus: updatedDailyStatus,
           streak: newStreak,

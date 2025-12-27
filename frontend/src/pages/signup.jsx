@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import Footer from "../components/footer";
+const api = import.meta.env.VITE_API_URL;
 
 const SignupForm = () => {
     const [view, setview] = useState("🤫");
@@ -36,7 +37,7 @@ const SignupForm = () => {
     }
     const submitData = async (e) => {
         e.preventDefault();
-        await axios.post('https://levelup-7vvn.onrender.com/api/auth/signup', {
+        await axios.post(`${api}/auth/signup`, {
             username,
             email,
             password

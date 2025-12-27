@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
+const api = import.meta.env.VITE_API_URL;
 
 const Popup = ({ message, del, cancel }) => {
     const popup = useRef();
@@ -34,7 +35,7 @@ const AddActivity = ({ setNewActivity, parentSetNewActivity }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post("https://levelup-7vvn.onrender.com/api/activities/activity", {
+            const response = await axios.post(`${api}/activities/activity`, {
                 "title": title,
                 "createdDate": new Date().toISOString()
             }, { withCredentials: true });
@@ -111,7 +112,7 @@ const Activities = ({ setNewActivity: parentSetNewActivity }) => {
         };
         const fetchActivities = async () => {
             try {
-                const response = await axios.get("http://localhost:3000/api/activities/", { withCredentials: true });
+                const response = await axios.get(`${api}/activities/`, { withCredentials: true });
                 setTasks(response.data);
                 setNewActivity(false);
             } catch (error) {
@@ -127,7 +128,7 @@ const Activities = ({ setNewActivity: parentSetNewActivity }) => {
 
     const handleDelete = async (id) => {
         try {
-            const response = await axios.delete(`https://levelup-7vvn.onrender.com/api/activities/${id}`, { withCredentials: true });
+            const response = await axios.delete(`${api}/activities/${id}`, { withCredentials: true });
             setNewActivity(prev => !prev);
             parentSetNewActivity(prev => !prev);
             toast.success(response.data.message)

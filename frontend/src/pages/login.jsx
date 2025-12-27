@@ -4,6 +4,7 @@ import axios from "axios";
 import { toast } from "react-hot-toast";
 import { AuthContext } from "../App";
 import Footer from "../components/footer";
+const api = import.meta.env.VITE_API_URL;
 
 const LoginForm = () => {
     const { authenticated, setAuthenticated } = useContext(AuthContext);
@@ -23,7 +24,7 @@ const LoginForm = () => {
     const submitData = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('https://levelup-7vvn.onrender.com/api/auth/login', {
+            const response = await axios.post(`${api}/auth/login`, {
                 email: email.trim(),
                 password
             }, { withCredentials: true });

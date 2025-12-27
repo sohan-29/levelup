@@ -7,6 +7,7 @@ import axios from "axios";
 import Loader from "../components/loader";
 import Activities from "../components/activities";
 import Footer from "../components/footer";
+const api = import.meta.env.VITE_API_URL;
 
 const Dashboard = () => {
     const { authenticated, setAuthenticated } = useContext(AuthContext);
@@ -19,7 +20,7 @@ const Dashboard = () => {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const res = await axios.get('https://levelup-7vvn.onrender.com/api/users/profile', { withCredentials: true });
+                const res = await axios.get(`${api}/users/profile`, { withCredentials: true });
                 setUser(res.data);
             } catch (err) {
                 setAuthenticated(false);
@@ -32,7 +33,7 @@ const Dashboard = () => {
         };
         const fetchActivities = async () => {
             try {
-                const response = await axios.get("https://levelup-7vvn.onrender.com/api/activities/", { withCredentials: true });
+                const response = await axios.get(`${api}/activities/`, { withCredentials: true });
                 setTasks(response.data);
                 setNewActivity(false);
             } catch (error) {

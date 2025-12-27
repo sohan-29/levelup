@@ -7,6 +7,7 @@ import { Toaster } from 'react-hot-toast'
 import { createContext, useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import Dashboard from './pages/dashboard'
+const api = import.meta.env.VITE_API_URL;
 
 export const AuthContext = createContext(null);
 
@@ -36,7 +37,7 @@ function App() {
         if (localToken) {
           axios.defaults.headers.common['Authorization'] = `Bearer ${localToken}`;
         }
-        const response = await axios.get('https://levelup-7vvn.onrender.com/api/auth/verify', { withCredentials: true });
+        const response = await axios.get(`${api}/auth/verify`, { withCredentials: true });
         if (response.data && response.data.authenticated) {
           handleSetAuthenticated(true);
         } else {
@@ -53,7 +54,7 @@ function App() {
 
   const logout = async () => {
     try {
-      await axios.post('https://levelup-7vvn.onrender.com/api/auth/logout', {}, { withCredentials: true });
+      await axios.post(`${api}/auth/logout`, {}, { withCredentials: true });
     } catch (error) {
       console.error('Logout error:', error);
     } finally {

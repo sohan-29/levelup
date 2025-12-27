@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 import { useRef } from "react";
 import axios from "axios";
+const api = import.meta.env.VITE_API_URL;
 
 const Profile = () => {
     const { authenticated, setAuthenticated } = useContext(AuthContext);
@@ -16,7 +17,7 @@ const Profile = () => {
 
     const logout = async () => {
         try {
-            await axios.post('https://levelup-7vvn.onrender.com/api/auth/logout', {}, { withCredentials: true });
+            await axios.post(`${api}/auth/logout`, {}, { withCredentials: true });
         } catch (error) {
             console.error('Logout error:', error);
         } finally {
@@ -30,7 +31,7 @@ const Profile = () => {
     useEffect(() => {
         const fetchProfile = async () => {
             try {
-                const res = await axios.get('https://levelup-7vvn.onrender.com/api/users/profile', { withCredentials: true });
+                const res = await axios.get(`${api}/users/profile`, { withCredentials: true });
                 setUser(res.data);
                 setProfile(res.data.username.charAt(0).toUpperCase());
             } catch (err) {
