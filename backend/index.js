@@ -35,44 +35,13 @@ app.use(cookieParser());
 const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const activitiesRoutes = require('./routes/activities');
+const notificationsRoutes = require('./routes/notifications');
+const authMiddleware = require('./middleware/auth');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/activities', activitiesRoutes);
-
-// 🔹 Notification Routes
-let tokens = []; // In-memory store for demo (replace with DB later)
-
-// Register FCM token
-app.post('/api/notifications/register', (req, res) => {
-  const { token } = req.body;
-  if (token && !tokens.includes(token)) {
-    tokens.push(token);
-    console.log("Token registered:", token);
-  }
-  res.json({ success: true });
-});
-
-// Send notification to a specific token
-app.post('/api/notifications/send', async (req, res) => {
-  const { token, title, body } = req.body;
-
-  const message = {
-    notification: {
-      title: title || "LevelUp Alert 🚀",
-      body: body || "You just got a new activity!",
-    },
-    token,
-  };
-
-  try {
-    const response = await admin.messaging().send(message);
-    res.json({ success: true, response });
-  } catch (err) {
-    console.error("Error sending notification:", err);
-    res.status(500).json({ success: false, error: err.message });
-  }
-});
+app.use('/api/notifications', authMiddleware, notificationsRoutes);
 
 // Sample route
 app.get('/', (req, res) => {

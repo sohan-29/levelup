@@ -3,17 +3,15 @@ import axios from "axios";
 import toast from "react-hot-toast";
 const api = import.meta.env.VITE_API_URL;
 
-function GridChart({ tasks, setNewActivity }) {
+function GridChart({ tasks, setNewActivity, setTasks }) {
   const [updatingDate, setUpdatingDate] = useState(null);
   const gridchart = useRef();
   const scrollContainerRef = useRef();
-  if (!tasks || tasks.length === 0) {
-    return <div className="text-gray-400 p-4">No activities yet. Start building your streak!</div>;
-  }
 
-  const earliestDate = new Date(
-    Math.min(...tasks.map(task => new Date(task.createdDate).getTime()))
-  );
+  // Calculate dates even when tasks is empty to maintain hook order
+  const earliestDate = tasks && tasks.length > 0
+    ? new Date(Math.min(...tasks.map(task => new Date(task.createdDate).getTime())))
+    : new Date();
   earliestDate.setHours(0, 0, 0, 0);
 
   // Generate all dates from earliest to today
@@ -28,10 +26,14 @@ function GridChart({ tasks, setNewActivity }) {
   }
 
   useEffect(() => {
-    if (scrollContainerRef.current) {
+    if (scrollContainerRef.current && tasks && tasks.length > 0) {
       scrollContainerRef.current.scrollLeft = scrollContainerRef.current.scrollWidth;
     }
   }, [allDates]);
+
+  if (!tasks || tasks.length === 0) {
+    return <div className="text-gray-400 p-4">No activities yet. Start building your streak!</div>;
+  }
 
   const calculateStreak = (dailyStatus, taskCreatedDate) => {
     let streakCount = 0;
@@ -66,16 +68,26 @@ function GridChart({ tasks, setNewActivity }) {
 
     setUpdatingDate(`${task._id}-${date.toDateString()}`);
 
+    const isCompleted = task.dailyStatus?.some(
+      (status) => new Date(status.date).toDateString() === clickedDate.toDateString() && status.completed
+    );
+
+    const updatedDailyStatus = isCompleted
+      ? task.dailyStatus.filter(status => new Date(status.date).toDateString() !== clickedDate.toDateString())
+      : [...(task.dailyStatus || []), { date: clickedDate, completed: true }];
+
+    const newStreak = calculateStreak(updatedDailyStatus, taskCreatedDate);
+
+    // Optimistically update the task in local state
+    const updatedTask = {
+      ...task,
+      dailyStatus: updatedDailyStatus,
+      streak: newStreak,
+      completed: !isCompleted
+    };
+    setTasks(prev => prev.map(t => t._id === task._id ? updatedTask : t));
+
     try {
-      const isCompleted = task.dailyStatus?.some(
-        (status) => new Date(status.date).toDateString() === clickedDate.toDateString() && status.completed
-      );
-
-      const updatedDailyStatus = isCompleted
-        ? task.dailyStatus.filter(status => new Date(status.date).toDateString() !== clickedDate.toDateString())
-        : [...(task.dailyStatus || []), { date: clickedDate, completed: true }];
-
-      const newStreak = calculateStreak(updatedDailyStatus, taskCreatedDate);
       const response = await axios.put(
         `${api}/activities/${task._id}`,
         {
@@ -91,8 +103,10 @@ function GridChart({ tasks, setNewActivity }) {
         }
       );
       toast.success(response.data.message)
-      setNewActivity(prev => !prev);
+      setNewActivity(prev => prev + 1);
     } catch (error) {
+      // Revert the optimistic update on error
+      setTasks(prev => prev.map(t => t._id === task._id ? task : t));
       console.log(error)
       toast.error("Unable to update activity")
     } finally {
