@@ -140,4 +140,18 @@ router.post('/unregister', async (req, res) => {
   }
 });
 
+// Import the notification scheduler for manual triggering
+const notificationScheduler = require('../notificationScheduler');
+
+// Manual trigger for streak reminders (for testing)
+router.post('/trigger-streak-reminders', async (req, res) => {
+  try {
+    await notificationScheduler.triggerStreakReminders();
+    res.json({ success: true, message: 'Streak reminders triggered successfully' });
+  } catch (error) {
+    console.error('Error triggering streak reminders:', error);
+    res.status(500).json({ success: false, message: 'Failed to trigger streak reminders' });
+  }
+});
+
 module.exports = router;

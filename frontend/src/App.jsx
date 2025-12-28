@@ -239,7 +239,6 @@ function App() {
           <Route path="/login" element={<AuthRedirect><LoginPage /></AuthRedirect>} />
           <Route path="/signup" element={<AuthRedirect><SignupPage /></AuthRedirect>} />
           <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
-          <Route path="*" element={<div>404 Not Found !</div>} />
         </Routes>
       </BrowserRouter>
     </AuthContext.Provider>
