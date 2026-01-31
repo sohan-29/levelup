@@ -12,6 +12,7 @@ const LoginForm = () => {
     const [passwordType, setPasswordType] = useState("password");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [loader, setLoader] = useState(false);
     const viewPassword = () => {
         if (view === "🤫") {
             setPasswordType("text");
@@ -23,6 +24,8 @@ const LoginForm = () => {
     }
     const submitData = async (e) => {
         e.preventDefault();
+        if (loader) return; 
+        setLoader(true);
         try {
             const response = await axios.post(`${api}/auth/login`, {
                 email: email.trim(),
@@ -41,27 +44,37 @@ const LoginForm = () => {
         } catch (error) {
             const msg = error?.response?.data?.error || error?.message || 'Login failed';
             toast.error(msg);
-            return;
+        } finally {
+            setLoader(false);
         }
     }
     return (
         <form className="flex flex-col md:w-lg lg:w-xl gap-4 bg-[#292929] p-8 rounded-lg shadow-lg" onSubmit={submitData}>
             <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center">
                 <label className="text-white text-lg font-medium w-1/4" htmlFor="mail">Mail:</label>
-                <input className="p-2 rounded-md text-white bg-[#333333] sm:w-sm md:w-xs lg:w-sm" type="email" id="mail" name="mail" value={email} onChange={(e) => setEmail(e.target.value)} required />
+                <input className="p-2 rounded-md text-white bg-[#333333] sm:w-sm md:w-xs lg:w-sm" type="email" id="mail" name="mail" value={email} onChange={(e) => setEmail(e.target.value)} required disabled={loader} />
             </div>
             <div className="relative flex flex-col sm:flex-row sm:justify-between sm:items-center">
                 <label className="text-white text-lg font-medium w-1/4" htmlFor="password">Password:</label>
-                <input className="p-2 rounded-md text-white bg-[#333333] sm:w-sm md:w-xs lg:w-sm" type={passwordType} id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+                <input className="p-2 rounded-md text-white bg-[#333333] sm:w-sm md:w-xs lg:w-sm" type={passwordType} id="password" name="password" value={password} onChange={(e) => setPassword(e.target.value)} required disabled={loader} />
                 <span className="absolute top-8 right-1.5 sm:top-1 sm:right-1.5 cursor-pointer text-2xl" onClick={viewPassword}>{view}</span>
                 <a rel="noopener noreferrer" href="#" className="hover:underline dark:text-amber-200 text-sm absolute top-18 sm:top-11 right-0">forgetpassword?</a>
             </div>
             <button
                 className={`bg-[#fee369] text-gray-800 font-bold py-2 px-4 rounded-md mt-5 ${password && email ? "hover:bg-amber-300" : "opacity-60 cursor-not-allowed"}`}
                 type="submit"
-                disabled={!email || !password}
+                disabled={!email || !password || loader}
+                aria-busy={loader}
+                aria-disabled={!email || !password || loader}
             >
-                Login
+                {loader ? (
+                    <span className="flex items-center gap-2 justify-center">
+                        <div className="animate-spin rounded-full border-2 border-t-transparent border-gray-800 h-4 w-4"></div>
+                        Logging in...
+                    </span>
+                ) : (
+                    "Login"
+                )}
             </button>
             <p className="px-6 text-sm text-center dark:text-white">Don't have an account yet?
                 <a rel="noopener noreferrer" href="/signup" className="hover:underline dark:text-amber-200"> Sign up</a>.
