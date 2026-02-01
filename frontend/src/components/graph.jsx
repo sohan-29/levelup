@@ -65,7 +65,7 @@ const Graph = ({ tasks }) => {
 
   return (
     <div ref={graph} className="bg-[#242424] p-3 rounded-xl overflow-x-auto" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
-      <div className="grid grid-flow-col gap-3">
+    <div className="grid grid-flow-col auto-cols-[13px] lg:auto-cols-[18px] gap-3">
         {weeks.map((week, wIdx) => (
           <div key={wIdx} className="flex flex-col items-center">
             {/* Days */}
@@ -97,7 +97,7 @@ const Graph = ({ tasks }) => {
             {/* Month label only at first week of month */}
             {week.month !== null &&
               (wIdx === 0 || weeks[wIdx - 1].month !== week.month) && (
-                <div className="text-xs text-gray-300 mt-1">
+                <div className="text-xs text-gray-300 mt-1 w-7 text-center truncate">
                   {monthNames[week.month]}
                 </div>
               )}
