@@ -311,3 +311,98 @@ None.
     "error": "Activity not found or unauthorized"
   }
   ```
+
+---
+
+### Notes APIs (`/notes`)
+
+#### 1. Get Note for a Date
+- **Method**: GET
+- **Endpoint**: `/notes?date=YYYY-MM-DD`
+- **Description**: Retrieves the note for the authenticated user for the given date. If `date` is omitted, defaults to today.
+
+#### Input Data (Query)
+- `date` (string, optional): ISO date string (YYYY-MM-DD) to retrieve the note for that day.
+
+#### Response
+- **Success (200 OK)**:
+  ```json
+  {
+    "note": {
+      "_id": "note_id",
+      "user": "user_id",
+      "date": "2026-02-01T00:00:00.000Z",
+      "text": "Your note text",
+      "createdAt": "...",
+      "updatedAt": "..."
+    }
+  }
+  ```
+  If no note exists for that date:
+  ```json
+  {
+    "note": null
+  }
+  ```
+
+#### 2. List Notes in a Range
+- **Method**: GET
+- **Endpoint**: `/notes/list?start=YYYY-MM-DD&end=YYYY-MM-DD`
+- **Description**: Returns all notes for the authenticated user within the inclusive date range.
+
+#### Input Data (Query)
+- `start` (string, optional): Start date (YYYY-MM-DD). Defaults to today if omitted.
+- `end` (string, optional): End date (YYYY-MM-DD). Defaults to today if omitted.
+
+#### Response
+- **Success (200 OK)**:
+  ```json
+  {
+    "notes": [
+      {
+        "_id": "note_id",
+        "user": "user_id",
+        "date": "2026-02-01T00:00:00.000Z",
+        "text": "Note text",
+        "createdAt": "...",
+        "updatedAt": "..."
+      }
+    ]
+  }
+  ```
+
+#### 3. Create/Update Note for Today's Date
+- **Method**: PUT
+- **Endpoint**: `/notes/:date`
+- **Description**: Create or update a note for the specified date. **Server enforces** that notes can only be created or updated for today's date (midnight-normalized). Attempts to modify past/future dates will return HTTP 403.
+
+#### Input Data (Request Body)
+- `text` (string, required): The note content. Must be non-empty and up to 500 characters.
+
+#### Example Request Body
+```json
+{
+  "text": "A short note about today's tasks"
+}
+```
+
+#### Response
+- **Success (200 OK)**:
+  ```json
+  {
+    "message": "Note saved",
+    "note": { ... }
+  }
+  ```
+- **Error (400 Bad Request)**: Validation error (e.g., empty or too long).
+  ```json
+  {
+    "error": "Note cannot exceed 500 characters"
+  }
+  ```
+- **Error (403 Forbidden)**: If trying to modify a day that is not today.
+  ```json
+  {
+    "error": "Notes can only be created or updated for today"
+  }
+  ```

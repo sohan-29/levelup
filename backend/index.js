@@ -36,6 +36,7 @@ const authRoutes = require('./routes/auth');
 const userRoutes = require('./routes/users');
 const activitiesRoutes = require('./routes/activities');
 const notificationsRoutes = require('./routes/notifications');
+const notesRoutes = require('./routes/notes');
 const authMiddleware = require('./middleware/auth');
 
 // Notification scheduler
@@ -44,6 +45,7 @@ const notificationScheduler = require('./notificationScheduler');
 app.use('/api/auth', authRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/activities', activitiesRoutes);
+app.use('/api/notes', authMiddleware, notesRoutes);
 
 // Add the trigger endpoint without auth middleware for testing
 app.post('/api/notifications/trigger-streak-reminders', async (req, res) => {
